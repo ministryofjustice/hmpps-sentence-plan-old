@@ -1,0 +1,71 @@
+version: 2.1
+
+orbs:
+  hmpps: ministryofjustice/hmpps@7.1.0
+  gradle: circleci/gradle@3.0.0
+  mem: circleci/rememborb@0.0.2
+
+_db_docker_config: &db_docker_config
+  - image: cimg/openjdk:17.0
+    environment:
+      POSTGRES_DB: sentence_plan_ci
+  - image: cimg/postgres:14.7
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: sentence_plan_ci
+
+jobs:
+  validate:
+    executor:
+      name: hmpps/java
+      tag: "17"
+    docker: *db_docker_config
+    environment:
+      _JAVA_OPTIONS: -Xmx512m -XX:ParallelGCThreads=2 -XX:ConcGCThreads=2 -Djava.util.concurrent.ForkJoinPool.common.parallelism=2 -Dorg.gradle.daemon=true -Dkotlin.compiler.execution.strategy=in-process
+    steps:
+      - checkout
+      - gradle/with_cache:
+          deps_checksum_file: "build.gradle.kts"
+          steps:
+            - run: ./gradlew check
+      - store_test_results:
+          path: build/test-results
+      - store_artifacts:
+          path: build/reports/tests
+      - store_artifacts:
+          path: build/reports/jacoco/test
+
+  validate_helm:
+    executor:
+      name: hmpps/default_small
+      tag: "3.10"
+    steps:
+      - checkout
+      - hmpps/k8s_setup
+      - hmpps/install_helm
+      - run:
+          name: Validate dev helm config via server dry run
+          command: |
+            wget https://github.com/mikefarah/yq/releases/download/v4.9.6/yq_linux_amd64.tar.gz -O - |\
+              tar xz && mv yq_linux_amd64 yq
+            helm dependency update "$CIRCLE_PROJECT_REPONAME"
+            helm template "$CIRCLE_PROJECT_REPONAME" "$CIRCLE_PROJECT_REPONAME" --values=values-dev.yaml | \
+              ./yq e 'select(.kind != "Service" and .kind != "Ingress")' - | \
+              kubectl apply --dry-run=server -f -
+          working_directory: helm_deploy
+
+workflows:
+  version: 2
+
+  build_test_and_deploy:
+    jobs:
+      - validate
+      - validate_helm:
+          context:
+            - hmpps-interventions-dev-deploy
+      - hmpps/trivy_latest_scan:
+          name: vulnerability_scan
+          slack_channel: probation-integration-notifications
+          requires: [validate, validate_helm]
+          context:
+            - hmpps-common-vars
