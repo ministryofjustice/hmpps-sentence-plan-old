@@ -7,6 +7,7 @@ plugins {
   kotlin("plugin.jpa") version "1.8.20"
   id("org.jlleitschuh.gradle.ktlint") version "11.3.1"
   id("com.google.cloud.tools.jib") version "3.3.1"
+  jacoco
 }
 
 group = "com.example"
@@ -77,6 +78,7 @@ tasks {
 
   withType<Test> {
     useJUnitPlatform()
+    finalizedBy("jacocoTestReport")
   }
 }
 
