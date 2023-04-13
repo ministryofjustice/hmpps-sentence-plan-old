@@ -101,10 +101,6 @@ workflows:
             - hmpps-interventions-dev-deploy
       - jib-build:
           context: hmpps-common-vars
-          filters:
-            branches:
-              only:
-                - main
       - hmpps/trivy_latest_scan:
           name: vulnerability_scan
           slack_channel: probation-integration-notifications
