@@ -1,1 +1,1 @@
-rootProject.name = "sentence-plan"
+rootProject.name = "hmpps-sentence-plan"
