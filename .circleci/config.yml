@@ -115,3 +115,15 @@ workflows:
             branches:
               only:
                 - main
+      - hmpps/deploy_env:
+          name: deploy_dev
+          env: "dev"
+          jira_update: true
+          context: hmpps-common-vars
+          filters:
+            branches:
+              only:
+                - main
+          requires:
+            - jib-build
+            - validate
