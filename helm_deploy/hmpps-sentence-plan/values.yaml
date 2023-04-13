@@ -24,12 +24,13 @@ generic-service:
   namespace_secrets:
     hmpps-sentence-plan:
       APPLICATIONINSIGHTS_CONNECTION_STRING: APPLICATIONINSIGHTS_CONNECTION_STRING
-      SPRING_DATASOURCE_URL: DB_URL
-      SPRING_DATASOURCE_USERNAME: DB_USERNAME
-      SPRING_DATASOURCE_PASSWORD: DB_PASSWORD
-      OAUTH2_CLIENT-ID: CLIENT_ID
-      OAUTH2_CLIENT-SECRET: CLIENT_SECRET
-      SENTRY_DSN: SENTRY_DSN
+    rds-postgresql-instance-output:
+      SPRING_DATASOURCE_URL: rds_instance_endpoint
+      SPRING_DATASOURCE_USERNAME: database_username
+      SPRING_DATASOURCE_PASSWORD: database_password
+#      OAUTH2_CLIENT-ID: CLIENT_ID
+#      OAUTH2_CLIENT-SECRET: CLIENT_SECRET
+#      SENTRY_DSN: SENTRY_DSN
 
 generic-prometheus-alerts:
   targetApplication: hmpps-sentence-plan
