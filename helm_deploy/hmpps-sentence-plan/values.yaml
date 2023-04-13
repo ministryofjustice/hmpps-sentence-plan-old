@@ -1,5 +1,6 @@
 generic-service:
   nameOverride: hmpps-sentence-plan
+  replicaCount: 2
   resources:
     requests:
       cpu: 128m
@@ -23,7 +24,7 @@ generic-service:
 
   namespace_secrets:
     hmpps-sentence-plan:
-      APPLICATIONINSIGHTS_CONNECTION_STRING: APPLICATIONINSIGHTS_CONNECTION_STRING
+      APPLICATIONINSIGHTS_CONNECTION_STRING: "InstrumentationKey=$(APPINSIGHTS_INSTRUMENTATIONKEY)"
     rds-postgresql-instance-output:
       SPRING_DATASOURCE_URL: rds_instance_endpoint
       SPRING_DATASOURCE_USERNAME: database_username
