@@ -9,23 +9,23 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 
 class AuthAwareTokenConverter : Converter<Jwt, AbstractAuthenticationToken> {
 
-    override fun convert(jwt: Jwt): AbstractAuthenticationToken {
-        return AuthAwareAuthenticationToken(
-            jwt = jwt,
-            authorities = extractAuthorities(jwt)
-        )
-    }
+  override fun convert(jwt: Jwt): AbstractAuthenticationToken {
+    return AuthAwareAuthenticationToken(
+      jwt = jwt,
+      authorities = extractAuthorities(jwt),
+    )
+  }
 
-    private fun extractAuthorities(jwt: Jwt): Collection<GrantedAuthority> {
-        if (jwt.claims.containsKey("authorities")) {
-            @Suppress("UNCHECKED_CAST")
-            return (jwt.claims["authorities"] as Collection<String>).map(::SimpleGrantedAuthority)
-        }
-        return listOf()
+  private fun extractAuthorities(jwt: Jwt): Collection<GrantedAuthority> {
+    if (jwt.claims.containsKey("authorities")) {
+      @Suppress("UNCHECKED_CAST")
+      return (jwt.claims["authorities"] as Collection<String>).map(::SimpleGrantedAuthority)
     }
+    return listOf()
+  }
 }
 
 class AuthAwareAuthenticationToken(
-    jwt: Jwt,
-    authorities: Collection<GrantedAuthority>
+  jwt: Jwt,
+  authorities: Collection<GrantedAuthority>,
 ) : JwtAuthenticationToken(jwt, authorities)
