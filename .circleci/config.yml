@@ -8,11 +8,13 @@ orbs:
 _db_docker_config: &db_docker_config
   - image: cimg/openjdk:17.0
     environment:
-      POSTGRES_DB: sentence_plan_ci
+      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
   - image: cimg/postgres:14.7
     environment:
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: sentence_plan_ci
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
 
 jobs:
   validate:
