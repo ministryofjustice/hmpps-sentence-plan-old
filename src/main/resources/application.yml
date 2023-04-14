@@ -1,3 +1,5 @@
+spring.security.oauth2.resourceserver.jwt.jwk-set-uri: https://sign-in-dev.hmpps.service.justice.gov.uk/auth/.well-known/jwks.json
+
 management.endpoints.web:
   base-path: /
   exposure.include: [ "health", "info" ]
