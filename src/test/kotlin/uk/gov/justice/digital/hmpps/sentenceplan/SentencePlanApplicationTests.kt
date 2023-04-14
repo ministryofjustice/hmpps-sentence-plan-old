@@ -1,11 +1,9 @@
 package uk.gov.justice.digital.hmpps.sentenceplan
 
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.data.repository.findByIdOrNull
 import uk.gov.justice.digital.hmpps.sentenceplan.person.PersonEntity
 import uk.gov.justice.digital.hmpps.sentenceplan.person.PersonRepository
 import java.util.UUID
