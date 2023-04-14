@@ -8,11 +8,13 @@ orbs:
 _db_docker_config: &db_docker_config
   - image: cimg/openjdk:17.0
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/postgres
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: postgres
+      DB_ENDPOINT: jdbc:postgresql://localhost:5432
+      DB_NAME: sentence-plan-ci
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
   - image: cimg/postgres:14.7
     environment:
+      POSTGRES_DB: sentence-plan-ci
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
 

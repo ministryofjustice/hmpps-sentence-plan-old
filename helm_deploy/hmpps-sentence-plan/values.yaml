@@ -30,9 +30,10 @@ generic-service:
       #      OAUTH2_CLIENT-SECRET: CLIENT_SECRET
       #      SENTRY_DSN: SENTRY_DSN
     rds-postgresql-instance-output:
-      SPRING_DATASOURCE_URL: rds_instance_endpoint
-      SPRING_DATASOURCE_USERNAME: database_username
-      SPRING_DATASOURCE_PASSWORD: database_password
+      DB_ENDPOINT: rds_instance_endpoint
+      DB_NAME: database_name
+      DB_USERNAME: database_username
+      DB_PASSWORD: database_password
 
 generic-prometheus-alerts:
   targetApplication: hmpps-sentence-plan

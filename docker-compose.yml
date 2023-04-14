@@ -4,6 +4,7 @@ services:
     image: postgres:14.1-alpine
     restart: always
     environment:
+      - POSTGRES_DB=sentence-plan
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     ports:

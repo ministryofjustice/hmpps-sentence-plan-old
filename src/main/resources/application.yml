@@ -1,9 +1,9 @@
 spring:
   datasource:
     driverClassName: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
-    password: postgres
+    url: jdbc:postgresql://${db.endpoint}/${db.name}
+    username: ${db.username}
+    password: ${db.password}
   jpa:
     show-sql: true
   flyway:
@@ -15,3 +15,9 @@ spring:
 management.endpoints.web:
   base-path: /
   exposure.include: [ "health", "info" ]
+
+db:
+  name: sentence-plan
+  endpoint: jdbc:postgresql://localhost:5432
+  username: postgres
+  password: postgres
