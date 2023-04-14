@@ -18,6 +18,6 @@ management.endpoints.web:
 
 db:
   name: sentence-plan
-  endpoint: jdbc:postgresql://localhost:5432
+  endpoint: localhost:5432
   username: postgres
   password: postgres
