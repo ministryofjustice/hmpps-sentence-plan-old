@@ -129,3 +129,4 @@ workflows:
           requires:
             - jib-build
             - validate
+            - validate_helm
