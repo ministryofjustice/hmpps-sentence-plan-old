@@ -127,6 +127,6 @@ workflows:
               only:
                 - main
           requires:
-            - jib-build
-            - validate
             - validate_helm
+            - validate
+            - jib-build
