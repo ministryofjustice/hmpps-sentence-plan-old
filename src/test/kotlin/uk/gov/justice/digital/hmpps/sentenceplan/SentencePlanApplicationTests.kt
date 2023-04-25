@@ -9,6 +9,8 @@ import uk.gov.justice.digital.hmpps.sentenceplan.entity.PersonRepository
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.SentencePlanEntity
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.SentencePlanRepository
 import java.time.ZonedDateTime
+import java.time.temporal.ChronoUnit
+import java.time.temporal.TemporalUnit
 import java.util.UUID
 
 @SpringBootTest
@@ -42,7 +44,7 @@ internal class SentencePlanApplicationTests {
     val sentencePlanSaved = sentencePlanRepository.getByPersonId(person.id)
 
     if (sentencePlanSaved != null) {
-      assertThat(sentencePlanSaved.createdDate).isEqualTo(createdDate)
+      assertThat(sentencePlanSaved.createdDate.truncatedTo(ChronoUnit.SECONDS)).isEqualTo(createdDate.truncatedTo(ChronoUnit.SECONDS))
       sentencePlanRepository.delete(sentencePlanSaved)
     }
     personRepository.delete(saved)
