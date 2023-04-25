@@ -21,3 +21,4 @@ db:
   endpoint: localhost:5432
   username: postgres
   password: postgres
+
