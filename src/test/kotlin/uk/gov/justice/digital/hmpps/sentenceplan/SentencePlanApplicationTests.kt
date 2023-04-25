@@ -33,7 +33,7 @@ internal class SentencePlanApplicationTests {
 
   @Test
   fun `can create and read a sentence plan`() {
-    val person = PersonEntity(UUID.randomUUID(), "X12312D")
+    val person = PersonEntity(UUID.randomUUID(), "X12312E")
     personRepository.save(person)
 
     val saved = personRepository.findById(person.id).orElseThrow()

@@ -1,6 +1,7 @@
 package uk.gov.justice.digital.hmpps.sentenceplan.service
 
 import org.springframework.stereotype.Service
+import uk.gov.justice.digital.hmpps.sentenceplan.entity.PersonEntity
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.PersonRepository
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.SentencePlanEntity
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.SentencePlanRepository
@@ -20,7 +21,7 @@ class SentencePlanService(
    *
    */
   fun createSentencePlan(crn: String, sentencePlanRequest: SentencePlan): SentencePlan {
-    val person = personRepository.getByCrn(crn)
+    val person = personRepository.findByCrn(crn) ?: personRepository.save(PersonEntity(UUID.randomUUID(), crn))
 
     val existingSentencePlan = sentencePlanRepository.getByPersonId(person.id)
     when {
