@@ -13,8 +13,8 @@ import uk.gov.justice.digital.hmpps.sentenceplan.service.SentencePlanService
 @RequestMapping("/offenders/{crn}/sentence-plan")
 class SentencePlanResource(private val service: SentencePlanService) {
 
-    @PreAuthorize("hasRole('ROLE_SENTENCE_PLAN_RW')")
-    @PostMapping
-    fun createSentencePlan(@PathVariable crn: String, @RequestBody sentencePlan: SentencePlan): SentencePlan =
-        service.createSentencePlan(crn, sentencePlan)
+  @PreAuthorize("hasRole('ROLE_SENTENCE_PLAN_RW')")
+  @PostMapping
+  fun createSentencePlan(@PathVariable crn: String, @RequestBody sentencePlan: SentencePlan): SentencePlan =
+    service.createSentencePlan(crn, sentencePlan)
 }

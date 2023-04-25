@@ -15,24 +15,24 @@ import java.util.UUID
 internal class SentencePlanApplicationTests {
   @Autowired
   internal lateinit var personRepository: PersonRepository
+
   @Autowired
   internal lateinit var sentencePlanRepository: SentencePlanRepository
 
   @Test
   fun `can create and read a person`() {
-    val person = PersonEntity(UUID.randomUUID(), "X12312B", "LM1234ML")
+    val person = PersonEntity(UUID.randomUUID(), "X12312B")
     personRepository.save(person)
 
     val saved = personRepository.findById(person.id).orElseThrow()
     assertThat(saved.crn).isEqualTo(person.crn)
-    assertThat(saved.nomsId).isEqualTo(person.nomsId)
 
     personRepository.delete(saved)
   }
 
   @Test
   fun `can create and read a sentence plan`() {
-    val person = PersonEntity(UUID.randomUUID(), "X12312D", "LM1234MZ")
+    val person = PersonEntity(UUID.randomUUID(), "X12312D")
     personRepository.save(person)
 
     val saved = personRepository.findById(person.id).orElseThrow()
@@ -41,7 +41,7 @@ internal class SentencePlanApplicationTests {
     sentencePlanRepository.save(sentencePlan)
     val sentencePlanSaved = sentencePlanRepository.getByPersonId(person.id)
 
-    if(sentencePlanSaved!=null) {
+    if (sentencePlanSaved != null) {
       assertThat(sentencePlanSaved.createdDate).isEqualTo(createdDate)
       sentencePlanRepository.delete(sentencePlanSaved)
     }

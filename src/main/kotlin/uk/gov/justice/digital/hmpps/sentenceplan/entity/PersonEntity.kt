@@ -13,12 +13,10 @@ class PersonEntity(
   @Id
   val id: UUID,
   val crn: String,
-  val nomsId: String,
 )
 
-interface PersonRepository : JpaRepository<PersonEntity, UUID>{
+interface PersonRepository : JpaRepository<PersonEntity, UUID> {
   fun findByCrn(crn: String): PersonEntity?
 }
 fun PersonRepository.getByCrn(crn: String) =
   findByCrn(crn) ?: throw NotFoundException("Person record does not exist for crn $crn")
-

@@ -1,12 +1,12 @@
 package uk.gov.justice.digital.hmpps.sentenceplan.service
 
 import org.springframework.stereotype.Service
+import uk.gov.justice.digital.hmpps.sentenceplan.entity.PersonRepository
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.SentencePlanEntity
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.SentencePlanRepository
+import uk.gov.justice.digital.hmpps.sentenceplan.entity.getByCrn
 import uk.gov.justice.digital.hmpps.sentenceplan.exception.NotFoundException
 import uk.gov.justice.digital.hmpps.sentenceplan.model.SentencePlan
-import uk.gov.justice.digital.hmpps.sentenceplan.entity.PersonRepository
-import uk.gov.justice.digital.hmpps.sentenceplan.entity.getByCrn
 import java.util.UUID
 
 @Service
@@ -34,6 +34,5 @@ class SentencePlanService(
         return SentencePlan(sentencePlanSaved.id, sentencePlanSaved.createdDate)
       }
     }
-
   }
 }
