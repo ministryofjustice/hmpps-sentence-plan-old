@@ -4,6 +4,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.test.context.ActiveProfiles
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.PersonEntity
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.PersonRepository
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.SentencePlanEntity
@@ -13,6 +14,7 @@ import java.time.temporal.ChronoUnit
 import java.util.UUID
 
 @SpringBootTest
+@ActiveProfiles("test")
 internal class SentencePlanApplicationTests {
   @Autowired
   internal lateinit var personRepository: PersonRepository

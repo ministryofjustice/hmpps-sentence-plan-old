@@ -9,7 +9,6 @@ spring:
   flyway:
     enabled: true
     validate-on-migrate: true
-  security.oauth2.resourceserver.jwt.jwk-set-uri: https://sign-in-dev.hmpps.service.justice.gov.uk/auth/.well-known/jwks.json
 
 
 management.endpoints.web:
@@ -21,4 +20,12 @@ db:
   endpoint: localhost:5432
   username: postgres
   password: postgres
+
+---
+
+spring.config.activate.on-profile: [ "dev", "test" ]
+
+spring:
+  security.oauth2:
+    resourceserver.jwt.public-key-location: classpath:local-public-key.pub
 

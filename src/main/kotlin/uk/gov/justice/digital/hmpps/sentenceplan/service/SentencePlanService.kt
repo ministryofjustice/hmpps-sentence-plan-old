@@ -31,7 +31,7 @@ class SentencePlanService(
       else -> {
         val sentencePlanSaved =
           sentencePlanRepository.save(SentencePlanEntity(UUID.randomUUID(), person, sentencePlanRequest.createdDate))
-        return SentencePlan(sentencePlanSaved.id, sentencePlanSaved.createdDate)
+        return SentencePlan(sentencePlanSaved.createdDate, sentencePlanSaved.id)
       }
     }
   }
