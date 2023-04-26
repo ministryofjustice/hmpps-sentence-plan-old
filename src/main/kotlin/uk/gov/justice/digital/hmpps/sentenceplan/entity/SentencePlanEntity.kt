@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 import java.time.ZonedDateTime
 import java.util.UUID
 
-@Entity(name = "sentencePlan")
+@Entity(name = "SentencePlan")
 @Table(name = "sentence_plan")
 class SentencePlanEntity(
   @Id
