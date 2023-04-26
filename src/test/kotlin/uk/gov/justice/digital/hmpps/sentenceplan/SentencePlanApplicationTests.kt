@@ -44,10 +44,14 @@ internal class SentencePlanApplicationTests {
     sentencePlanRepository.save(sentencePlan)
     val sentencePlanSaved = sentencePlanRepository.getByPersonId(person.id)
 
-    if (sentencePlanSaved != null) {
-      assertThat(sentencePlanSaved.createdDate.truncatedTo(ChronoUnit.SECONDS)).isEqualTo(createdDate.truncatedTo(ChronoUnit.SECONDS))
-      sentencePlanRepository.delete(sentencePlanSaved)
-    }
+    assertThat(sentencePlanSaved).isNotNull
+    assertThat(sentencePlanSaved!!.createdDate.truncatedTo(ChronoUnit.SECONDS)).isEqualTo(
+      createdDate.truncatedTo(
+        ChronoUnit.SECONDS,
+      ),
+    )
+    sentencePlanRepository.delete(sentencePlanSaved)
+
     personRepository.delete(saved)
   }
 }
