@@ -44,7 +44,7 @@ class SentencePlanIntegrationTest {
     val crn = "X123321Z"
 
     mockMvc.perform(
-      post("/offenders/$crn/sentence-plan")
+      post("/sentence-plan/?crn=$crn")
         .withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl)
         .contentType("application/json")
         .content(objectMapper.writeValueAsString(content)),
@@ -63,7 +63,7 @@ class SentencePlanIntegrationTest {
     val crn = "X123321Z"
 
     mockMvc.perform(
-      post("/offenders/$crn/sentence-plan")
+      post("/sentence-plan/?crn=$crn")
         .withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl)
         .contentType("application/json")
         .content(objectMapper.writeValueAsString(content)),
@@ -71,7 +71,7 @@ class SentencePlanIntegrationTest {
       .andExpect(status().is2xxSuccessful)
 
     mockMvc.perform(
-      post("/offenders/$crn/sentence-plan")
+      post("/sentence-plan/?crn=$crn")
         .withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl)
         .contentType("application/json")
         .content(objectMapper.writeValueAsString(content)),

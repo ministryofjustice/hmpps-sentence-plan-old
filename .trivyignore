@@ -36,3 +36,5 @@ CVE-2022-45868
 CVE-2023-24998
 # app insights jar
 CVE-2023-1370
+# Suppressed as we don't use EL frameworks
+CVE-2023-20863
