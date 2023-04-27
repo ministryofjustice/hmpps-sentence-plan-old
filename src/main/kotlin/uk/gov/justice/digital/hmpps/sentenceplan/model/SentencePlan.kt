@@ -6,4 +6,5 @@ import java.util.UUID
 data class SentencePlan(
   val createdDate: ZonedDateTime,
   val id: UUID?,
+  val crn: String,
 )
