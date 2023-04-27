@@ -19,19 +19,19 @@ class SentencePlanService(
    * Create a new sentence plan for a crn.
    *
    */
-  fun createSentencePlan(crn: String, sentencePlanRequest: SentencePlan): SentencePlan {
-    val person = personRepository.findByCrn(crn) ?: personRepository.save(PersonEntity(UUID.randomUUID(), crn))
+  fun createSentencePlan(sentencePlanRequest: SentencePlan): SentencePlan {
+    val person = personRepository.findByCrn(sentencePlanRequest.crn) ?: personRepository.save(PersonEntity(UUID.randomUUID(), sentencePlanRequest.crn))
 
     val existingSentencePlan = sentencePlanRepository.getByPersonId(person.id)
     when {
       existingSentencePlan != null -> {
-        throw ConflictException("Sentence plan already exists for $crn")
+        throw ConflictException("Sentence plan already exists for $sentencePlanRequest.crn")
       }
 
       else -> {
         val sentencePlanSaved =
           sentencePlanRepository.save(SentencePlanEntity(UUID.randomUUID(), person, sentencePlanRequest.createdDate))
-        return SentencePlan(sentencePlanSaved.createdDate, sentencePlanSaved.id)
+        return SentencePlan(sentencePlanSaved.createdDate, sentencePlanSaved.id, person.crn)
       }
     }
   }

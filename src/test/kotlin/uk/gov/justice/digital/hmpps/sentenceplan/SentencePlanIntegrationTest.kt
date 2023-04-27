@@ -39,12 +39,11 @@ class SentencePlanIntegrationTest {
 
   @Test
   fun `successful response`(wireMockRuntimeInfo: WireMockRuntimeInfo) {
-    val content = SentencePlan(createdDate = ZonedDateTime.now(), null)
-
     val crn = "X123321Z"
+    val content = SentencePlan(createdDate = ZonedDateTime.now(), null, crn)
 
     mockMvc.perform(
-      post("/offenders/$crn/sentence-plan")
+      post("/sentence-plan/")
         .withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl)
         .contentType("application/json")
         .content(objectMapper.writeValueAsString(content)),
@@ -58,12 +57,11 @@ class SentencePlanIntegrationTest {
 
   @Test
   fun `sentence plan already exists`(wireMockRuntimeInfo: WireMockRuntimeInfo) {
-    val content = SentencePlan(createdDate = ZonedDateTime.now(), null)
-
     val crn = "X123321Z"
+    val content = SentencePlan(createdDate = ZonedDateTime.now(), null, crn)
 
     mockMvc.perform(
-      post("/offenders/$crn/sentence-plan")
+      post("/sentence-plan/")
         .withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl)
         .contentType("application/json")
         .content(objectMapper.writeValueAsString(content)),
@@ -71,7 +69,7 @@ class SentencePlanIntegrationTest {
       .andExpect(status().is2xxSuccessful)
 
     mockMvc.perform(
-      post("/offenders/$crn/sentence-plan")
+      post("/sentence-plan/")
         .withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl)
         .contentType("application/json")
         .content(objectMapper.writeValueAsString(content)),
