@@ -1,6 +1,6 @@
 generic-service:
   ingress:
-    host: hmpps-sentence-plan-dev.hmpps.service.justice.gov.uk
+    host: sentence-plan-api-dev.hmpps.service.justice.gov.uk
 
   env:
     SENTRY_ENVIRONMENT: dev
