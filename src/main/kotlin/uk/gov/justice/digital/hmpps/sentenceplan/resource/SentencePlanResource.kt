@@ -11,7 +11,7 @@ import uk.gov.justice.digital.hmpps.sentenceplan.model.SentencePlan
 import uk.gov.justice.digital.hmpps.sentenceplan.service.SentencePlanService
 
 @RestController
-@RequestMapping("/sentence-plan/")
+@RequestMapping("/sentence-plan")
 @PreAuthorize("hasRole('ROLE_SENTENCE_PLAN_RW')")
 class SentencePlanResource(private val service: SentencePlanService) {
 
