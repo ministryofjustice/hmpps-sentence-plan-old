@@ -11,7 +11,7 @@ import java.util.UUID
 
 @Entity(name = "SentencePlan")
 @Table(name = "sentence_plan")
-class SentencePlanEntity(
+data class SentencePlanEntity(
   @Id
   val id: UUID,
 
@@ -20,8 +20,13 @@ class SentencePlanEntity(
   val person: PersonEntity,
 
   val createdDate: ZonedDateTime,
+
+  val activeDate: ZonedDateTime? = null,
+
+  val closedDate: ZonedDateTime? = null,
 )
 
 interface SentencePlanRepository : JpaRepository<SentencePlanEntity, UUID> {
-  fun getByPersonId(personId: UUID): SentencePlanEntity?
+  fun existsByPersonIdAndClosedDateIsNull(personId: UUID): Boolean
+  fun findByPersonId(personId: UUID): List<SentencePlanEntity>
 }

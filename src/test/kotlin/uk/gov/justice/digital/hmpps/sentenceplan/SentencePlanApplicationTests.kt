@@ -42,15 +42,12 @@ internal class SentencePlanApplicationTests {
     val createdDate = ZonedDateTime.now()
     val sentencePlan = SentencePlanEntity(UUID.randomUUID(), person, createdDate)
     sentencePlanRepository.save(sentencePlan)
-    val sentencePlanSaved = sentencePlanRepository.getByPersonId(person.id)
+    val sentencePlanSaved = sentencePlanRepository.findByPersonId(person.id)
 
-    assertThat(sentencePlanSaved).isNotNull
-    assertThat(sentencePlanSaved!!.createdDate.truncatedTo(ChronoUnit.SECONDS)).isEqualTo(
-      createdDate.truncatedTo(
-        ChronoUnit.SECONDS,
-      ),
-    )
-    sentencePlanRepository.delete(sentencePlanSaved)
+    assertThat(sentencePlanSaved).hasSize(1)
+    assertThat(sentencePlanSaved[0].createdDate.truncatedTo(ChronoUnit.SECONDS))
+      .isEqualTo(createdDate.truncatedTo(ChronoUnit.SECONDS))
+    sentencePlanRepository.delete(sentencePlanSaved[0])
 
     personRepository.delete(saved)
   }
