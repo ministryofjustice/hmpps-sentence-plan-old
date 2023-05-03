@@ -65,7 +65,7 @@ class SentencePlanIntegrationTest {
     createSentencePlan(crn, wireMockRuntimeInfo)
 
     mockMvc.perform(
-      post("/sentence-plan/")
+      post("/sentence-plan")
         .withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl)
         .json(objectMapper.writeValueAsString(content)),
     )
@@ -81,7 +81,7 @@ class SentencePlanIntegrationTest {
       sentencePlanRepository.saveAll(sentencePlanRepository.findAll().map { it.copy(closedDate = ZonedDateTime.now()) })
     }
 
-    mockMvc.perform(get("/sentence-plan/?crn=$crn").withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl))
+    mockMvc.perform(get("/sentence-plan?crn=$crn").withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl))
       .andExpect(status().isOk)
       .andExpect(jsonPath("$.sentencePlans").isNotEmpty)
       .andExpect(jsonPath("$.sentencePlans.size()").value(3))
@@ -92,7 +92,7 @@ class SentencePlanIntegrationTest {
     wireMockRuntimeInfo: WireMockRuntimeInfo,
     json: String = objectMapper.writeValueAsString(SentencePlan(null, crn)),
   ) = objectMapper.readValue<SentencePlan>(
-    mockMvc.perform(post("/sentence-plan/").withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl).json(json))
+    mockMvc.perform(post("/sentence-plan").withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl).json(json))
       .andExpect(status().is2xxSuccessful)
       .andReturn()
       .response.contentAsString,
