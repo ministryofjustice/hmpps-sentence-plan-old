@@ -1,9 +1,11 @@
 package uk.gov.justice.digital.hmpps.sentenceplan
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
@@ -11,8 +13,11 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import uk.gov.justice.digital.hmpps.security.json
 import uk.gov.justice.digital.hmpps.security.withOAuth2Token
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.PersonRepository
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.SentencePlanRepository
@@ -37,46 +42,59 @@ class SentencePlanIntegrationTest {
   @Autowired
   lateinit var personRepository: PersonRepository
 
+  @BeforeEach
+  fun cleanup() {
+    sentencePlanRepository.deleteAll()
+  }
+
   @Test
-  fun `successful response`(wireMockRuntimeInfo: WireMockRuntimeInfo) {
+  fun `create a sentence plan`(wireMockRuntimeInfo: WireMockRuntimeInfo) {
     val crn = "X123321Z"
-    val content = SentencePlan(createdDate = ZonedDateTime.now(), null, crn)
 
-    mockMvc.perform(
-      post("/sentence-plan/")
-        .withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl)
-        .contentType("application/json")
-        .content(objectMapper.writeValueAsString(content)),
-    )
-      .andExpect(status().is2xxSuccessful)
+    createSentencePlan(crn, wireMockRuntimeInfo)
 
-    val sentencePlan = sentencePlanRepository.getByPersonId(personRepository.getByCrn(crn).id)
-    assertThat(sentencePlan).isNotNull
-    sentencePlanRepository.delete(sentencePlan!!)
+    val sentencePlans = sentencePlanRepository.findByPersonId(personRepository.getByCrn(crn).id)
+    assertThat(sentencePlans).hasSize(1)
   }
 
   @Test
   fun `sentence plan already exists`(wireMockRuntimeInfo: WireMockRuntimeInfo) {
     val crn = "X123321Z"
-    val content = SentencePlan(createdDate = ZonedDateTime.now(), null, crn)
+    val content = SentencePlan(null, crn)
+
+    createSentencePlan(crn, wireMockRuntimeInfo)
 
     mockMvc.perform(
       post("/sentence-plan/")
         .withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl)
-        .contentType("application/json")
-        .content(objectMapper.writeValueAsString(content)),
-    )
-      .andExpect(status().is2xxSuccessful)
-
-    mockMvc.perform(
-      post("/sentence-plan/")
-        .withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl)
-        .contentType("application/json")
-        .content(objectMapper.writeValueAsString(content)),
+        .json(objectMapper.writeValueAsString(content)),
     )
       .andExpect(status().isConflict)
-
-    val sentencePlan = sentencePlanRepository.getByPersonId(personRepository.getByCrn(crn).id)
-    sentencePlanRepository.delete(sentencePlan!!)
   }
+
+  @Test
+  fun `list all sentence plans for a case`(wireMockRuntimeInfo: WireMockRuntimeInfo) {
+    val crn = "X123321Z"
+
+    repeat(3) {
+      createSentencePlan(crn, wireMockRuntimeInfo)
+      sentencePlanRepository.saveAll(sentencePlanRepository.findAll().map { it.copy(closedDate = ZonedDateTime.now()) })
+    }
+
+    mockMvc.perform(get("/sentence-plan/?crn=$crn").withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl))
+      .andExpect(status().isOk)
+      .andExpect(jsonPath("$.sentencePlans").isNotEmpty)
+      .andExpect(jsonPath("$.sentencePlans.size()").value(3))
+  }
+
+  private fun createSentencePlan(
+    crn: String,
+    wireMockRuntimeInfo: WireMockRuntimeInfo,
+    json: String = objectMapper.writeValueAsString(SentencePlan(null, crn)),
+  ) = objectMapper.readValue<SentencePlan>(
+    mockMvc.perform(post("/sentence-plan/").withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl).json(json))
+      .andExpect(status().is2xxSuccessful)
+      .andReturn()
+      .response.contentAsString,
+  )
 }
