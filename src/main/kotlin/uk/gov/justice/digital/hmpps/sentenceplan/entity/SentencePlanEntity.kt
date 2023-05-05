@@ -11,12 +11,12 @@ import java.util.UUID
 
 @Entity(name = "SentencePlan")
 @Table(name = "sentence_plan")
-data class SentencePlanEntity(
+class SentencePlanEntity(
   @Id
   val id: UUID,
 
   @ManyToOne
-  @JoinColumn(name = "personId", nullable = false)
+  @JoinColumn(name = "person_id", nullable = false)
   val person: PersonEntity,
 
   val createdDate: ZonedDateTime,

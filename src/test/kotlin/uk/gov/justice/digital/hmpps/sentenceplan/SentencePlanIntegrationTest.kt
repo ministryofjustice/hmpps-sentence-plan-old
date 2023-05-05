@@ -20,8 +20,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import uk.gov.justice.digital.hmpps.security.json
 import uk.gov.justice.digital.hmpps.security.withOAuth2Token
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.PersonRepository
+import uk.gov.justice.digital.hmpps.sentenceplan.entity.SentencePlanEntity
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.SentencePlanRepository
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.getByCrn
+import uk.gov.justice.digital.hmpps.sentenceplan.model.CreateSentencePlan
 import uk.gov.justice.digital.hmpps.sentenceplan.model.SentencePlan
 import java.time.ZonedDateTime
 
@@ -60,7 +62,7 @@ class SentencePlanIntegrationTest {
   @Test
   fun `sentence plan already exists`(wireMockRuntimeInfo: WireMockRuntimeInfo) {
     val crn = "X123321Z"
-    val content = SentencePlan(null, crn)
+    val content = CreateSentencePlan(crn)
 
     createSentencePlan(crn, wireMockRuntimeInfo)
 
@@ -78,7 +80,7 @@ class SentencePlanIntegrationTest {
 
     repeat(3) {
       createSentencePlan(crn, wireMockRuntimeInfo)
-      sentencePlanRepository.saveAll(sentencePlanRepository.findAll().map { it.copy(closedDate = ZonedDateTime.now()) })
+      sentencePlanRepository.saveAll(sentencePlanRepository.findAll().map { it.withClosedDate(closedDate = ZonedDateTime.now()) })
     }
 
     mockMvc.perform(get("/sentence-plan?crn=$crn").withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl))
@@ -87,10 +89,14 @@ class SentencePlanIntegrationTest {
       .andExpect(jsonPath("$.sentencePlans.size()").value(3))
   }
 
+  fun SentencePlanEntity.withClosedDate(
+    closedDate: ZonedDateTime?,
+  ): SentencePlanEntity = SentencePlanEntity(id, person, createdDate, activeDate, closedDate)
+
   private fun createSentencePlan(
     crn: String,
     wireMockRuntimeInfo: WireMockRuntimeInfo,
-    json: String = objectMapper.writeValueAsString(SentencePlan(null, crn)),
+    json: String = objectMapper.writeValueAsString(CreateSentencePlan(crn)),
   ) = objectMapper.readValue<SentencePlan>(
     mockMvc.perform(post("/sentence-plan").withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl).json(json))
       .andExpect(status().is2xxSuccessful)

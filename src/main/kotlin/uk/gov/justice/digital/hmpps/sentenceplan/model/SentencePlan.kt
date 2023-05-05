@@ -5,7 +5,7 @@ import java.time.ZonedDateTime
 import java.util.UUID
 
 data class SentencePlan(
-  val id: UUID?,
+  val id: UUID,
   val crn: String,
   val createdDate: ZonedDateTime = ZonedDateTime.now(),
   val activeDate: ZonedDateTime? = null,
@@ -15,6 +15,10 @@ data class SentencePlan(
     activeDate != null && activeDate.isBefore(ZonedDateTime.now()) -> "Active"
     else -> "Draft"
   },
+)
+
+data class CreateSentencePlan(
+  val crn: String,
 )
 
 fun SentencePlanEntity.toModel() = SentencePlan(
