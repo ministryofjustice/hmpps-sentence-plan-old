@@ -11,7 +11,6 @@ import uk.gov.justice.digital.hmpps.sentenceplan.entity.SentencePlanEntity
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.SentencePlanRepository
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
-import java.util.UUID
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -40,7 +39,7 @@ internal class SentencePlanApplicationTests {
 
     val saved = personRepository.findById(person.id).orElseThrow()
     val createdDate = ZonedDateTime.now()
-    val sentencePlan = SentencePlanEntity(UUID.randomUUID(), person, createdDate)
+    val sentencePlan = SentencePlanEntity(person, createdDate)
     sentencePlanRepository.save(sentencePlan)
     val sentencePlanSaved = sentencePlanRepository.findByPersonId(person.id)
 
