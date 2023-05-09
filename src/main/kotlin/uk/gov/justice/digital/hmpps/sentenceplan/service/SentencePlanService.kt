@@ -6,6 +6,7 @@ import uk.gov.justice.digital.hmpps.sentenceplan.entity.PersonRepository
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.SentencePlanEntity
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.SentencePlanRepository
 import uk.gov.justice.digital.hmpps.sentenceplan.exception.ConflictException
+import uk.gov.justice.digital.hmpps.sentenceplan.model.CreateSentencePlan
 import uk.gov.justice.digital.hmpps.sentenceplan.model.SentencePlan
 import uk.gov.justice.digital.hmpps.sentenceplan.model.SentencePlanList
 import uk.gov.justice.digital.hmpps.sentenceplan.model.toModel
@@ -22,9 +23,9 @@ class SentencePlanService(
    * Create a new sentence plan for a crn.
    *
    */
-  fun createSentencePlan(sentencePlanRequest: SentencePlan): SentencePlan {
+  fun createSentencePlan(sentencePlanRequest: CreateSentencePlan): SentencePlan {
     val person = personRepository.findByCrn(sentencePlanRequest.crn)
-      ?: personRepository.save(PersonEntity(UUID.randomUUID(), sentencePlanRequest.crn))
+      ?: personRepository.save(PersonEntity(sentencePlanRequest.crn))
 
     return when {
       sentencePlanRepository.existsByPersonIdAndClosedDateIsNull(person.id) ->

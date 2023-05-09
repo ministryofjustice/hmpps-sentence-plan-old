@@ -7,12 +7,12 @@ import org.springframework.data.jpa.repository.JpaRepository
 import uk.gov.justice.digital.hmpps.sentenceplan.exception.NotFoundException
 import java.util.UUID
 
-@Entity(name = "person")
+@Entity(name = "Person")
 @Table(name = "person")
 class PersonEntity(
-  @Id
-  val id: UUID,
   val crn: String,
+  @Id
+  val id: UUID = UUID.randomUUID(),
 )
 
 interface PersonRepository : JpaRepository<PersonEntity, UUID> {
