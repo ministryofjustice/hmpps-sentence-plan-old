@@ -12,9 +12,6 @@ import java.util.UUID
 @Entity(name = "SentencePlan")
 @Table(name = "sentence_plan")
 class SentencePlanEntity(
-  @Id
-  val id: UUID,
-
   @ManyToOne
   @JoinColumn(name = "person_id", nullable = false)
   val person: PersonEntity,
@@ -24,6 +21,9 @@ class SentencePlanEntity(
   val activeDate: ZonedDateTime? = null,
 
   val closedDate: ZonedDateTime? = null,
+
+  @Id
+  val id: UUID = UUID.randomUUID(),
 )
 
 interface SentencePlanRepository : JpaRepository<SentencePlanEntity, UUID> {

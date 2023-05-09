@@ -1,11 +1,13 @@
 package uk.gov.justice.digital.hmpps.sentenceplan.service
 
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.PersonEntity
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.PersonRepository
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.SentencePlanEntity
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.SentencePlanRepository
 import uk.gov.justice.digital.hmpps.sentenceplan.exception.ConflictException
+import uk.gov.justice.digital.hmpps.sentenceplan.exception.NotFoundException
 import uk.gov.justice.digital.hmpps.sentenceplan.model.CreateSentencePlan
 import uk.gov.justice.digital.hmpps.sentenceplan.model.SentencePlan
 import uk.gov.justice.digital.hmpps.sentenceplan.model.SentencePlanList
@@ -31,7 +33,7 @@ class SentencePlanService(
       sentencePlanRepository.existsByPersonIdAndClosedDateIsNull(person.id) ->
         throw ConflictException("Sentence plan already exists for $sentencePlanRequest.crn")
 
-      else -> sentencePlanRepository.save(SentencePlanEntity(UUID.randomUUID(), person, ZonedDateTime.now())).toModel()
+      else -> sentencePlanRepository.save(SentencePlanEntity(person, ZonedDateTime.now())).toModel()
     }
   }
 
@@ -45,4 +47,7 @@ class SentencePlanService(
       ?.map { it.toModel() }
       ?: emptyList(),
   )
+
+  fun findSentencePlan(id: UUID): SentencePlan = sentencePlanRepository.findByIdOrNull(id)?.toModel()
+    ?: throw NotFoundException("SentencePlan", "id", id)
 }

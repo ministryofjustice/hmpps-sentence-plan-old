@@ -80,7 +80,9 @@ class SentencePlanIntegrationTest {
 
     repeat(3) {
       createSentencePlan(crn, wireMockRuntimeInfo)
-      sentencePlanRepository.saveAll(sentencePlanRepository.findAll().map { it.withClosedDate(closedDate = ZonedDateTime.now()) })
+      sentencePlanRepository.saveAll(
+        sentencePlanRepository.findAll().map { it.withClosedDate(closedDate = ZonedDateTime.now()) },
+      )
     }
 
     mockMvc.perform(get("/sentence-plan?crn=$crn").withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl))
@@ -89,9 +91,24 @@ class SentencePlanIntegrationTest {
       .andExpect(jsonPath("$.sentencePlans.size()").value(3))
   }
 
+  @Test
+  fun `can retrieve a single sentence plan by id`(wireMockRuntimeInfo: WireMockRuntimeInfo) {
+    val crn = "S123456"
+
+    val sentencePlan = createSentencePlan(crn, wireMockRuntimeInfo)
+
+    mockMvc.perform(
+      get("/sentence-plan/${sentencePlan.id}")
+        .withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl),
+    )
+      .andExpect(status().isOk)
+      .andExpect(jsonPath("$.id").value(sentencePlan.id.toString()))
+      .andExpect(jsonPath("$.crn").value(crn))
+  }
+
   fun SentencePlanEntity.withClosedDate(
     closedDate: ZonedDateTime?,
-  ): SentencePlanEntity = SentencePlanEntity(id, person, createdDate, activeDate, closedDate)
+  ): SentencePlanEntity = SentencePlanEntity(person, createdDate, activeDate, closedDate, id)
 
   private fun createSentencePlan(
     crn: String,
