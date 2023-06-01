@@ -15,13 +15,11 @@ import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import uk.gov.justice.digital.hmpps.security.json
 import uk.gov.justice.digital.hmpps.security.withOAuth2Token
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.ObjectiveRepository
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.PersonRepository
-import uk.gov.justice.digital.hmpps.sentenceplan.entity.SentencePlanEntity
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.SentencePlanRepository
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.getByCrn
 import uk.gov.justice.digital.hmpps.sentenceplan.model.CreateObjective
@@ -29,7 +27,6 @@ import uk.gov.justice.digital.hmpps.sentenceplan.model.CreateSentencePlan
 import uk.gov.justice.digital.hmpps.sentenceplan.model.Objective
 import uk.gov.justice.digital.hmpps.sentenceplan.model.ObjectiveList
 import uk.gov.justice.digital.hmpps.sentenceplan.model.SentencePlan
-import java.time.ZonedDateTime
 import java.util.UUID
 
 @AutoConfigureMockMvc
@@ -69,7 +66,6 @@ class ObjectiveIntegrationTest {
     val objectiveRetrieved = objectiveRepository.findById(objectiveSaved.id)
 
     assertThat(objectiveRetrieved.get().description).isEqualTo(objectiveSaved.description)
-
   }
 
   @Test
@@ -80,14 +76,13 @@ class ObjectiveIntegrationTest {
     val sentencePlans = sentencePlanRepository.findByPersonId(personRepository.getByCrn(crn).id)
     val objectiveSaved = createObjective(sentencePlans[0].id, wireMockRuntimeInfo)
     val objectiveRetrieved = objectMapper.readValue<Objective>(
-    mockMvc.perform(get("/sentence-plan/${sentencePlans[0].id}/objective/${objectiveSaved.id}").withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl))
-      .andExpect(status().is2xxSuccessful)
-      .andReturn()
-      .response.contentAsString,
+      mockMvc.perform(get("/sentence-plan/${sentencePlans[0].id}/objective/${objectiveSaved.id}").withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl))
+        .andExpect(status().is2xxSuccessful)
+        .andReturn()
+        .response.contentAsString,
     )
 
     assertThat(objectiveRetrieved.description).isEqualTo(objectiveSaved.description)
-
   }
 
   @Test
@@ -105,7 +100,6 @@ class ObjectiveIntegrationTest {
     )
     assertThat(objectiveRetrieved.objectives.size).isEqualTo(1)
     assertThat(objectiveRetrieved.objectives[0].description).isEqualTo(objectiveSaved.description)
-
   }
 
   private fun createSentencePlan(
