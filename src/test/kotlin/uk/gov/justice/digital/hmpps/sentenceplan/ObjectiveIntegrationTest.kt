@@ -57,7 +57,7 @@ class ObjectiveIntegrationTest {
 
   @Test
   fun `create an objective`(wireMockRuntimeInfo: WireMockRuntimeInfo) {
-    val crn = "X123321Z"
+    val crn = "X123322Z"
 
     createSentencePlan(crn, wireMockRuntimeInfo)
     val sentencePlans = sentencePlanRepository.findByPersonId(personRepository.getByCrn(crn).id)
@@ -70,7 +70,7 @@ class ObjectiveIntegrationTest {
 
   @Test
   fun `get an objective`(wireMockRuntimeInfo: WireMockRuntimeInfo) {
-    val crn = "X123321Z"
+    val crn = "X123322Z"
 
     createSentencePlan(crn, wireMockRuntimeInfo)
     val sentencePlans = sentencePlanRepository.findByPersonId(personRepository.getByCrn(crn).id)
@@ -87,7 +87,7 @@ class ObjectiveIntegrationTest {
 
   @Test
   fun `get all objectives`(wireMockRuntimeInfo: WireMockRuntimeInfo) {
-    val crn = "X123321Z"
+    val crn = "X123322Z"
 
     createSentencePlan(crn, wireMockRuntimeInfo)
     val sentencePlans = sentencePlanRepository.findByPersonId(personRepository.getByCrn(crn).id)
