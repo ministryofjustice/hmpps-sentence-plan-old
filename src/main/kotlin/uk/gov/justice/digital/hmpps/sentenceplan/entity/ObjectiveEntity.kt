@@ -22,6 +22,5 @@ class ObjectiveEntity(
 )
 
 interface ObjectiveRepository : JpaRepository<ObjectiveEntity, UUID> {
-  fun existsBySentencePlanIdAndId(sentencePlanId: UUID, id: UUID): Boolean
   fun findBySentencePlanId(sentencePlanId: UUID): List<ObjectiveEntity>
 }

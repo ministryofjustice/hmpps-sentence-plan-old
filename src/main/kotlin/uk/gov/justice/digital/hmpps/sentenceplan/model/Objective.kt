@@ -9,6 +9,10 @@ data class Objective(
   val description: String,
 )
 
+data class CreateObjective(
+  val description: String,
+)
+
 fun ObjectiveEntity.toModel() = Objective(
   id = id,
   sentencePlanId = sentencePlan.id,
