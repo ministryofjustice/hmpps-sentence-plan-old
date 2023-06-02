@@ -6,6 +6,7 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import org.springframework.data.jpa.repository.JpaRepository
+import uk.gov.justice.digital.hmpps.sentenceplan.exception.NotFoundException
 import java.time.ZonedDateTime
 import java.util.UUID
 
@@ -30,3 +31,6 @@ interface SentencePlanRepository : JpaRepository<SentencePlanEntity, UUID> {
   fun existsByPersonIdAndClosedDateIsNull(personId: UUID): Boolean
   fun findByPersonId(personId: UUID): List<SentencePlanEntity>
 }
+
+fun SentencePlanRepository.getByIdOrThrow(id: UUID): SentencePlanEntity =
+  findById(id).orElseThrow { NotFoundException("SentencePlan", "id", id) }

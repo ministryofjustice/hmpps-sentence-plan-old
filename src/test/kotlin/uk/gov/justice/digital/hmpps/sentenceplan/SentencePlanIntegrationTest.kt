@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPat
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import uk.gov.justice.digital.hmpps.security.json
 import uk.gov.justice.digital.hmpps.security.withOAuth2Token
+import uk.gov.justice.digital.hmpps.sentenceplan.entity.ObjectiveRepository
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.PersonRepository
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.SentencePlanEntity
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.SentencePlanRepository
@@ -42,10 +43,14 @@ class SentencePlanIntegrationTest {
   lateinit var sentencePlanRepository: SentencePlanRepository
 
   @Autowired
+  lateinit var objectiveRepository: ObjectiveRepository
+
+  @Autowired
   lateinit var personRepository: PersonRepository
 
   @BeforeEach
   fun cleanup() {
+    objectiveRepository.deleteAll()
     sentencePlanRepository.deleteAll()
   }
 
