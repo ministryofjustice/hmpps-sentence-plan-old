@@ -6,6 +6,7 @@ import uk.gov.justice.digital.hmpps.sentenceplan.entity.ObjectiveEntity
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.ObjectiveRepository
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.SentencePlanRepository
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.getByIdOrThrow
+import uk.gov.justice.digital.hmpps.sentenceplan.entity.getBySentencePlanIdAndId
 import uk.gov.justice.digital.hmpps.sentenceplan.exception.NotFoundException
 import uk.gov.justice.digital.hmpps.sentenceplan.model.CreateObjective
 import uk.gov.justice.digital.hmpps.sentenceplan.model.Objective
@@ -28,6 +29,12 @@ class ObjectiveService(
       .let {
         objectiveRepository.save(ObjectiveEntity(it, description = objective.description)).toModel()
       }
+  }
+
+  fun updateObjective(sentencePlanId: UUID, objective: Objective): Objective {
+    val original = objectiveRepository.getBySentencePlanIdAndId(sentencePlanId, objective.id)
+    val toSave = original.copy(description = objective.description)
+    return objectiveRepository.save(toSave).toModel()
   }
 
   /**
