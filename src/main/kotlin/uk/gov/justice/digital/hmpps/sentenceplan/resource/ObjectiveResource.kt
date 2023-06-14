@@ -1,5 +1,6 @@
 package uk.gov.justice.digital.hmpps.sentenceplan.resource
 
+import org.springframework.http.HttpStatus
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -7,6 +8,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
 import uk.gov.justice.digital.hmpps.sentenceplan.model.CreateObjective
 import uk.gov.justice.digital.hmpps.sentenceplan.model.Objective
@@ -19,6 +21,7 @@ import java.util.UUID
 class ObjectiveResource(private val service: ObjectiveService) {
 
   @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
   fun createObjective(@PathVariable sentencePlanId: UUID, @RequestBody objective: CreateObjective): Objective =
     service.createObjective(sentencePlanId, objective)
 
