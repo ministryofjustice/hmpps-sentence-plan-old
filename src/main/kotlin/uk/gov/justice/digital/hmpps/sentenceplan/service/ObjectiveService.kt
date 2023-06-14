@@ -28,6 +28,7 @@ class ObjectiveService(
    * Create a new objective for a sentence plan.
    *
    */
+  @Transactional
   fun createObjective(sentencePlanId: UUID, objective: CreateObjective): Objective {
     val sentencePlan = sentencePlanRepository.getByIdOrThrow(sentencePlanId)
     val objectiveEntity = ObjectiveEntity(
