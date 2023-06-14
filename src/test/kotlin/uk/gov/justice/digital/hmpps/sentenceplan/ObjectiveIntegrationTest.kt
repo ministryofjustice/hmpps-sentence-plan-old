@@ -19,12 +19,14 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import uk.gov.justice.digital.hmpps.security.json
 import uk.gov.justice.digital.hmpps.security.withOAuth2Token
+import uk.gov.justice.digital.hmpps.sentenceplan.entity.NeedRepository
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.ObjectiveRepository
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.PersonRepository
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.SentencePlanRepository
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.getByCrn
 import uk.gov.justice.digital.hmpps.sentenceplan.model.CreateObjective
 import uk.gov.justice.digital.hmpps.sentenceplan.model.CreateSentencePlan
+import uk.gov.justice.digital.hmpps.sentenceplan.model.Need
 import uk.gov.justice.digital.hmpps.sentenceplan.model.Objective
 import uk.gov.justice.digital.hmpps.sentenceplan.model.ObjectiveList
 import uk.gov.justice.digital.hmpps.sentenceplan.model.SentencePlan
@@ -51,8 +53,12 @@ class ObjectiveIntegrationTest {
   @Autowired
   lateinit var personRepository: PersonRepository
 
+  @Autowired
+  lateinit var needRepository: NeedRepository
+
   @BeforeEach
   fun cleanup() {
+    needRepository.deleteAll()
     objectiveRepository.deleteAll()
     sentencePlanRepository.deleteAll()
   }
@@ -71,19 +77,61 @@ class ObjectiveIntegrationTest {
   }
 
   @Test
-  fun `update an objective`(wireMockRuntimeInfo: WireMockRuntimeInfo) {
+  fun `update an objective change description`(wireMockRuntimeInfo: WireMockRuntimeInfo) {
     val crn = "X123322Z"
 
     createSentencePlan(crn, wireMockRuntimeInfo)
     val sentencePlans = sentencePlanRepository.findByPersonId(personRepository.getByCrn(crn).id)
     val objectiveSaved = createObjective(sentencePlans[0].id, wireMockRuntimeInfo)
-    val objectiveRetrieved = objectiveRepository.findById(objectiveSaved.id)
-    val updatedObjective = objectiveRetrieved.get().copy(description = "updated ${objectiveRetrieved.get().description}")
-    updateObjective(objectiveRetrieved.get().sentencePlan.id, updatedObjective.toModel(), wireMockRuntimeInfo)
+    val objectiveRetrieved = objectiveRepository.findById(objectiveSaved.id).orElseThrow()
+    objectiveRetrieved.description = "updated ${objectiveRetrieved.description}"
+    updateObjective(objectiveRetrieved.sentencePlan.id, objectiveRetrieved.toModel(), wireMockRuntimeInfo)
 
-    val updatedObjectiveRetrieved = objectiveRepository.findById(objectiveSaved.id)
+    val updatedObjectiveRetrieved = objectiveRepository.findById(objectiveSaved.id).orElseThrow()
 
-    assertThat(updatedObjectiveRetrieved.get().description).isEqualTo(updatedObjective.description)
+    assertThat(updatedObjectiveRetrieved.description).isEqualTo(objectiveRetrieved.description)
+  }
+
+  @Test
+  fun `update an objective add need`(wireMockRuntimeInfo: WireMockRuntimeInfo) {
+    val crn = "X123322Z"
+
+    createSentencePlan(crn, wireMockRuntimeInfo)
+    val sentencePlans = sentencePlanRepository.findByPersonId(personRepository.getByCrn(crn).id)
+    val objectiveSaved = createObjective(sentencePlans[0].id, wireMockRuntimeInfo)
+    val objectiveRetrieved = objectiveRepository.findById(objectiveSaved.id).orElseThrow()
+    val objectiveModel = objectiveRetrieved.toModel()
+    updateObjective(
+      objectiveRetrieved.sentencePlan.id,
+      objectiveModel.copy(needs = objectiveModel.needs + Need("Education")),
+      wireMockRuntimeInfo,
+    )
+
+    val updatedObjectiveRetrieved = objectiveRepository.findById(objectiveSaved.id).orElseThrow()
+
+    assertThat(updatedObjectiveRetrieved.description).isEqualTo(objectiveRetrieved.description)
+    assertThat(updatedObjectiveRetrieved.needs.size).isEqualTo(2)
+  }
+
+  @Test
+  fun `update an objective delete need`(wireMockRuntimeInfo: WireMockRuntimeInfo) {
+    val crn = "X123322Z"
+
+    createSentencePlan(crn, wireMockRuntimeInfo)
+    val sentencePlans = sentencePlanRepository.findByPersonId(personRepository.getByCrn(crn).id)
+    val objectiveSaved = createObjective(sentencePlans[0].id, wireMockRuntimeInfo)
+    val objectiveRetrieved = objectiveRepository.findById(objectiveSaved.id).orElseThrow()
+    val objectiveModel = objectiveRetrieved.toModel()
+    updateObjective(
+      objectiveRetrieved.sentencePlan.id,
+      objectiveModel.copy(needs = setOf(Need("Education"))),
+      wireMockRuntimeInfo,
+    )
+
+    val updatedObjectiveRetrieved = objectiveRepository.findById(objectiveSaved.id).orElseThrow()
+
+    assertThat(updatedObjectiveRetrieved.description).isEqualTo(objectiveRetrieved.description)
+    assertThat(updatedObjectiveRetrieved.needs.size).isEqualTo(1)
   }
 
   @Test
@@ -94,7 +142,11 @@ class ObjectiveIntegrationTest {
     val sentencePlans = sentencePlanRepository.findByPersonId(personRepository.getByCrn(crn).id)
     val objectiveSaved = createObjective(sentencePlans[0].id, wireMockRuntimeInfo)
     val objectiveRetrieved = objectMapper.readValue<Objective>(
-      mockMvc.perform(get("/sentence-plan/${sentencePlans[0].id}/objective/${objectiveSaved.id}").withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl))
+      mockMvc.perform(
+        get("/sentence-plan/${sentencePlans[0].id}/objective/${objectiveSaved.id}").withOAuth2Token(
+          wireMockRuntimeInfo.httpBaseUrl,
+        ),
+      )
         .andExpect(status().is2xxSuccessful)
         .andReturn()
         .response.contentAsString,
@@ -134,20 +186,31 @@ class ObjectiveIntegrationTest {
   private fun createObjective(
     sentencePlanId: UUID,
     wireMockRuntimeInfo: WireMockRuntimeInfo,
-    json: String = objectMapper.writeValueAsString(CreateObjective("objective for sp: $sentencePlanId")),
+    json: String = objectMapper.writeValueAsString(
+      CreateObjective(
+        "objective for sp: $sentencePlanId",
+        setOf(Need("relationships")),
+      ),
+    ),
   ) = objectMapper.readValue<Objective>(
-    mockMvc.perform(post("/sentence-plan/$sentencePlanId/objective").withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl).json(json))
+    mockMvc.perform(
+      post("/sentence-plan/$sentencePlanId/objective").withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl).json(json),
+    )
       .andExpect(status().is2xxSuccessful)
       .andReturn()
       .response.contentAsString,
   )
+
   private fun updateObjective(
     sentencePlanId: UUID,
     objective: Objective,
     wireMockRuntimeInfo: WireMockRuntimeInfo,
     json: String = objectMapper.writeValueAsString(objective),
   ) = objectMapper.readValue<Objective>(
-    mockMvc.perform(put("/sentence-plan/$sentencePlanId/objective/${objective.id}").withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl).json(json))
+    mockMvc.perform(
+      put("/sentence-plan/$sentencePlanId/objective/${objective.id}").withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl)
+        .json(json),
+    )
       .andExpect(status().is2xxSuccessful)
       .andReturn()
       .response.contentAsString,
