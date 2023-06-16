@@ -16,9 +16,8 @@ class ActionEntity(
   var description: String,
   @Convert(converter = NumericToBooleanConverter::class)
   var interventionParticipation: Boolean = false,
-  var nationalInterventionCode: String?,
-  var accreditedProgramme: String?,
-  var localIntervention: String?,
+  var interventionName: String?,
+  var interventionType: String?,
   var status: String,
   var owner: String,
   val createdDateTime: ZonedDateTime = ZonedDateTime.now(),

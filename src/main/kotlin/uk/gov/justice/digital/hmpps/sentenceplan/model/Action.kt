@@ -12,9 +12,8 @@ data class Action(
   val objectiveId: UUID,
   val description: String,
   val interventionParticipation: Boolean,
-  val nationalInterventionCode: String?,
-  val accreditedProgramme: String?,
-  val localIntervention: String?,
+  val interventionName: String?,
+  val interventionType: String?,
   val status: String,
   val owner: String,
 )
@@ -22,9 +21,8 @@ data class Action(
 data class CreateAction(
   val description: String,
   val interventionParticipation: Boolean,
-  val nationalInterventionCode: String?,
-  val accreditedProgramme: String?,
-  val localIntervention: String?,
+  val interventionName: String?,
+  val interventionType: String?,
   val status: String,
   val owner: String,
 )
@@ -34,9 +32,8 @@ fun ActionEntity.toModel() = Action(
   objectiveId,
   description,
   interventionParticipation,
-  nationalInterventionCode,
-  accreditedProgramme,
-  localIntervention,
+  interventionName,
+  interventionType,
   status,
   owner,
 )

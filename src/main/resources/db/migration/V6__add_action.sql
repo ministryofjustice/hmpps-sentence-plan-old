@@ -2,10 +2,9 @@ CREATE TABLE action (
                         id UUID PRIMARY KEY,
                         objective_id UUID NOT NULL,
                         description VARCHAR NOT NULL,
-                        intervention_participation NUMERIC(1) NOT NULL,
-                        national_intervention_code VARCHAR,
-                        accredited_programme VARCHAR,
-                        local_intervention VARCHAR,
+                        intervention_participation numeric NOT NULL,
+                        intervention_name VARCHAR,
+                        intervention_type VARCHAR,
                         status VARCHAR NOT NULL,
                         owner VARCHAR NOT NULL,
                         created_date_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP

@@ -75,7 +75,7 @@ class ActionIntegrationTest {
   fun `createAction should create a new action`(wireMockRuntimeInfo: WireMockRuntimeInfo) {
     val sentencePlanId = createSentencePlan("C123123X", wireMockRuntimeInfo).id
     val objectiveId = createObjective(sentencePlanId, wireMockRuntimeInfo).id
-    val createAction = CreateAction("Test Action", true, "INT123", null, null, "TODO", "Individual")
+    val createAction = CreateAction("Test Action", true, "INT123", "local", "TODO", "Individual")
 
     mockMvc.perform(
       post("/sentence-plan/{sentencePlanId}/objective/{objectiveId}/action", sentencePlanId, objectiveId)
@@ -88,8 +88,8 @@ class ActionIntegrationTest {
       .andExpect(jsonPath("$.description").value(createAction.description))
       .andExpect(jsonPath("$.status").value(createAction.status))
       .andExpect(jsonPath("$.interventionParticipation").value(createAction.interventionParticipation))
-      .andExpect(jsonPath("$.nationalInterventionCode").value(createAction.nationalInterventionCode))
-      .andExpect(jsonPath("$.accreditedProgramme").value(createAction.accreditedProgramme))
+      .andExpect(jsonPath("$.interventionName").value(createAction.interventionName))
+      .andExpect(jsonPath("$.interventionType").value(createAction.interventionType))
       .andExpect(jsonPath("$.owner").value(createAction.owner))
 
     Assertions.assertEquals(actionRepository.findAllByObjectiveIdOrderByCreatedDateTimeAsc(objectiveId).size, 1)
@@ -99,7 +99,7 @@ class ActionIntegrationTest {
   fun `get a single action`(wireMockRuntimeInfo: WireMockRuntimeInfo) {
     val sentencePlanId = createSentencePlan("C123123X", wireMockRuntimeInfo).id
     val objectiveId = createObjective(sentencePlanId, wireMockRuntimeInfo).id
-    val createAction = CreateAction("Test Action", true, "INT123", null, null, "TODO", "Individual")
+    val createAction = CreateAction("Test Action", true, "INT123", "local", "TODO", "Individual")
 
     val actionRetrieved = objectMapper.readValue<Action>(
       mockMvc.perform(
@@ -125,8 +125,8 @@ class ActionIntegrationTest {
       .andExpect(jsonPath("$.description").value(createAction.description))
       .andExpect(jsonPath("$.status").value(createAction.status))
       .andExpect(jsonPath("$.interventionParticipation").value(createAction.interventionParticipation))
-      .andExpect(jsonPath("$.nationalInterventionCode").value(createAction.nationalInterventionCode))
-      .andExpect(jsonPath("$.accreditedProgramme").value(createAction.accreditedProgramme))
+      .andExpect(jsonPath("$.interventionName").value(createAction.interventionName))
+      .andExpect(jsonPath("$.interventionType").value(createAction.interventionType))
       .andExpect(jsonPath("$.owner").value(createAction.owner))
   }
 
@@ -134,7 +134,7 @@ class ActionIntegrationTest {
   fun `get a list of actions`(wireMockRuntimeInfo: WireMockRuntimeInfo) {
     val sentencePlanId = createSentencePlan("C123123X", wireMockRuntimeInfo).id
     val objectiveId = createObjective(sentencePlanId, wireMockRuntimeInfo).id
-    val createAction = CreateAction("Test Action 1", true, "INT123", null, null, "TODO", "Individual")
+    val createAction = CreateAction("Test Action 1", true, "INT123", "local", "TODO", "Individual")
 
     val actionRetrieved = objectMapper.readValue<Action>(
       mockMvc.perform(
@@ -147,7 +147,7 @@ class ActionIntegrationTest {
         .response.contentAsString,
     )
 
-    val createActionTwo = CreateAction("Test Action 2", true, "INT123", null, null, "TODO", "Individual")
+    val createActionTwo = CreateAction("Test Action 2", true, "INT123", "local", "TODO", "Individual")
 
     val actionRetrievedTwo = objectMapper.readValue<Action>(
       mockMvc.perform(
@@ -172,8 +172,8 @@ class ActionIntegrationTest {
       .andExpect(jsonPath("$.actions[0].description").value(createAction.description))
       .andExpect(jsonPath("$.actions[0].status").value(createAction.status))
       .andExpect(jsonPath("$.actions[0].interventionParticipation").value(createAction.interventionParticipation))
-      .andExpect(jsonPath("$.actions[0].nationalInterventionCode").value(createAction.nationalInterventionCode))
-      .andExpect(jsonPath("$.actions[0].accreditedProgramme").value(createAction.accreditedProgramme))
+      .andExpect(jsonPath("$.actions[0].interventionName").value(createAction.interventionName))
+      .andExpect(jsonPath("$.actions[0].interventionType").value(createAction.interventionType))
       .andExpect(jsonPath("$.actions[0].owner").value(createAction.owner))
       .andExpect(jsonPath("$.actions[1].description").value(createActionTwo.description))
   }
@@ -182,7 +182,7 @@ class ActionIntegrationTest {
   fun `delete should delete an action`(wireMockRuntimeInfo: WireMockRuntimeInfo) {
     val sentencePlanId = createSentencePlan("C123123X", wireMockRuntimeInfo).id
     val objectiveId = createObjective(sentencePlanId, wireMockRuntimeInfo).id
-    val createAction = CreateAction("Test Action", true, "INT123", null, null, "TODO", "Individual")
+    val createAction = CreateAction("Test Action", true, "INT123", "local", "TODO", "Individual")
 
     val actionRetrieved = objectMapper.readValue<Action>(
       mockMvc.perform(
@@ -212,7 +212,7 @@ class ActionIntegrationTest {
   fun `update an action`(wireMockRuntimeInfo: WireMockRuntimeInfo) {
     val sentencePlanId = createSentencePlan("C123123X", wireMockRuntimeInfo).id
     val objectiveId = createObjective(sentencePlanId, wireMockRuntimeInfo).id
-    val createAction = CreateAction("Test Action", true, "INT123", null, null, "TODO", "Individual")
+    val createAction = CreateAction("Test Action", true, "INT123", "local", "TODO", "Individual")
 
     val actionRetrieved = objectMapper.readValue<Action>(
       mockMvc.perform(
