@@ -1,6 +1,5 @@
 package uk.gov.justice.digital.hmpps.sentenceplan.entity
 
-import jakarta.persistence.Convert
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.Table
@@ -14,14 +13,11 @@ class ActionEntity(
 
   val objectiveId: UUID,
   var description: String,
-  @Convert(converter = NumericToBooleanConverter::class)
   var interventionParticipation: Boolean = false,
   var interventionName: String?,
   var interventionType: String?,
   var status: String,
-  @Convert(converter = NumericToBooleanConverter::class)
   var individualOwner: Boolean = false,
-  @Convert(converter = NumericToBooleanConverter::class)
   var practitionerOwner: Boolean = false,
   var otherOwner: String?,
   val createdDateTime: ZonedDateTime = ZonedDateTime.now(),

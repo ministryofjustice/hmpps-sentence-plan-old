@@ -11,7 +11,7 @@ data class Action(
   val id: UUID,
   val objectiveId: UUID,
   val description: String,
-  val interventionParticipation: Boolean = false,
+  val interventionParticipation: Boolean? = false,
   val interventionName: String?,
   val interventionType: String?,
   val status: String,
