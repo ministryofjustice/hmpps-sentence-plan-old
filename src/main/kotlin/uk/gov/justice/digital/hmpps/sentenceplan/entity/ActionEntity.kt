@@ -19,7 +19,11 @@ class ActionEntity(
   var interventionName: String?,
   var interventionType: String?,
   var status: String,
-  var owner: String,
+  @Convert(converter = NumericToBooleanConverter::class)
+  var individualOwner: Boolean = false,
+  @Convert(converter = NumericToBooleanConverter::class)
+  var practitionerOwner: Boolean = false,
+  var otherOwner: String?,
   val createdDateTime: ZonedDateTime = ZonedDateTime.now(),
   @Id
   val id: UUID = UUID.randomUUID(),

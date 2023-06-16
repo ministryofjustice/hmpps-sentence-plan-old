@@ -26,7 +26,9 @@ class ActionService(
       action.interventionName,
       action.interventionType,
       action.status,
-      action.owner,
+      action.individualOwner,
+      action.practitionerOwner,
+      action.otherOwner,
     )
 
     actionRepository.save(actionEntity)
@@ -40,7 +42,9 @@ class ActionService(
     actionEntity.interventionName = action.interventionName
     actionEntity.interventionType = action.interventionType
     actionEntity.status = action.status
-    actionEntity.owner = action.owner
+    actionEntity.individualOwner = action.individualOwner
+    actionEntity.practitionerOwner = action.practitionerOwner
+    actionEntity.otherOwner = action.otherOwner
     return actionRepository.save(actionEntity).toModel()
   }
 

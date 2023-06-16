@@ -6,7 +6,9 @@ CREATE TABLE action (
                         intervention_name VARCHAR,
                         intervention_type VARCHAR,
                         status VARCHAR NOT NULL,
-                        owner VARCHAR NOT NULL,
+                        individual_owner numeric NOT NULL,
+                        practitioner_owner numeric NOT NULL,
+                        other_owner VARCHAR,
                         created_date_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
