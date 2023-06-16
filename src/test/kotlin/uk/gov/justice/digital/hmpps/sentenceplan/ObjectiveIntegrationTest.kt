@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import uk.gov.justice.digital.hmpps.security.json
 import uk.gov.justice.digital.hmpps.security.withOAuth2Token
+import uk.gov.justice.digital.hmpps.sentenceplan.entity.ActionRepository
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.NeedRepository
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.ObjectiveRepository
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.PersonRepository
@@ -54,10 +55,14 @@ class ObjectiveIntegrationTest {
   lateinit var personRepository: PersonRepository
 
   @Autowired
+  lateinit var actionRepository: ActionRepository
+
+  @Autowired
   lateinit var needRepository: NeedRepository
 
   @BeforeEach
   fun cleanup() {
+    actionRepository.deleteAll()
     needRepository.deleteAll()
     objectiveRepository.deleteAll()
     sentencePlanRepository.deleteAll()
