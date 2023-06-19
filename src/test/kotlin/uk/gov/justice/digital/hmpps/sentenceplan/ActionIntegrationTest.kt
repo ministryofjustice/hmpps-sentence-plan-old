@@ -31,6 +31,7 @@ import uk.gov.justice.digital.hmpps.sentenceplan.model.Action
 import uk.gov.justice.digital.hmpps.sentenceplan.model.CreateAction
 import uk.gov.justice.digital.hmpps.sentenceplan.model.CreateObjective
 import uk.gov.justice.digital.hmpps.sentenceplan.model.CreateSentencePlan
+import uk.gov.justice.digital.hmpps.sentenceplan.model.Need
 import uk.gov.justice.digital.hmpps.sentenceplan.model.Objective
 import uk.gov.justice.digital.hmpps.sentenceplan.model.SentencePlan
 import java.util.UUID
@@ -321,7 +322,7 @@ class ActionIntegrationTest {
       CreateObjective(
         "objective for sp: $sentencePlanId",
         "Contemplation",
-        setOf("relationships"),
+        setOf(Need("relationships")),
       ),
     ),
   ) = objectMapper.readValue<Objective>(

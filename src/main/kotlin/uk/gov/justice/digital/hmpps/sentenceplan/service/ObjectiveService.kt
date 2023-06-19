@@ -37,7 +37,7 @@ class ObjectiveService(
       motivation = objective.motivation,
     )
     objectiveRepository.save(objectiveEntity)
-    val needEntities = needRepository.saveAll(objective.needs.map { NeedEntity(code = it, objective = objectiveEntity) }).toSet()
+    val needEntities = needRepository.saveAll(objective.needs.map { NeedEntity(code = it.code, objective = objectiveEntity) }).toSet()
     objectiveEntity.addNeeds(needEntities)
     return objectiveEntity.toModel()
   }
