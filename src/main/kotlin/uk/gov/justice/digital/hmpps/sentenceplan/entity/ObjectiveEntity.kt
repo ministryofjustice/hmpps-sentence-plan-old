@@ -24,6 +24,8 @@ class ObjectiveEntity(
 
   var description: String,
 
+  var motivation: String?,
+
   @OneToMany(mappedBy = "objective")
   val needs: MutableSet<NeedEntity> = mutableSetOf(),
 ) {

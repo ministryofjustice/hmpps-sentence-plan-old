@@ -136,6 +136,7 @@ class ObjectiveIntegrationTest {
     val updatedObjectiveRetrieved = objectiveRepository.findById(objectiveSaved.id).orElseThrow()
 
     assertThat(updatedObjectiveRetrieved.description).isEqualTo(objectiveRetrieved.description)
+    assertThat(updatedObjectiveRetrieved.motivation).isEqualTo(objectiveRetrieved.motivation)
     assertThat(updatedObjectiveRetrieved.needs.size).isEqualTo(1)
   }
 
@@ -194,6 +195,7 @@ class ObjectiveIntegrationTest {
     json: String = objectMapper.writeValueAsString(
       CreateObjective(
         "objective for sp: $sentencePlanId",
+        "Contemplation",
         setOf(Need("relationships")),
       ),
     ),

@@ -34,6 +34,7 @@ class ObjectiveService(
     val objectiveEntity = ObjectiveEntity(
       sentencePlan,
       description = objective.description,
+      motivation = objective.motivation,
     )
     objectiveRepository.save(objectiveEntity)
     val needEntities = needRepository.saveAll(objective.needs.map { NeedEntity(code = it.code, objective = objectiveEntity) }).toSet()
@@ -48,6 +49,7 @@ class ObjectiveService(
       .map { NeedEntity(it.code, original) }.toSet()
     val removedNeeds = original.needs.filter { objective.needs.none { on -> it.code == on.code } }.toSet()
     original.description = objective.description
+    original.motivation = objective.motivation
     original.addNeeds(newNeedEntities)
     original.removeNeeds(removedNeeds)
     needRepository.saveAll(newNeedEntities)
