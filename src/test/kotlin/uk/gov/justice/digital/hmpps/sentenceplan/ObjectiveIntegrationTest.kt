@@ -209,7 +209,7 @@ class ObjectiveIntegrationTest {
       CreateObjective(
         "objective for sp: $sentencePlanId",
         "Contemplation",
-        setOf(Need("relationships")),
+        setOf("relationships"),
       ),
     ),
   ) = objectMapper.readValue<Objective>(

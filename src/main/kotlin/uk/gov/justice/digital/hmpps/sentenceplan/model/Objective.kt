@@ -14,7 +14,7 @@ data class Objective(
 data class CreateObjective(
   val description: String,
   val motivation: String?,
-  val needs: Set<Need> = setOf(),
+  val needs: Set<String> = setOf(),
 )
 
 data class Need(
