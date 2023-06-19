@@ -321,6 +321,7 @@ class ActionIntegrationTest {
     json: String = objectMapper.writeValueAsString(
       CreateObjective(
         "objective for sp: $sentencePlanId",
+        "Contemplation",
         setOf(Need("relationships")),
       ),
     ),
