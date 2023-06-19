@@ -82,6 +82,19 @@ class ObjectiveIntegrationTest {
   }
 
   @Test
+  fun `create an objective without need`(wireMockRuntimeInfo: WireMockRuntimeInfo) {
+    val crn = "X123322Z"
+
+    createSentencePlan(crn, wireMockRuntimeInfo)
+    val sentencePlans = sentencePlanRepository.findByPersonId(personRepository.getByCrn(crn).id)
+    val objectiveSaved = createObjectiveWithoutNeed(sentencePlans[0].id, wireMockRuntimeInfo)
+
+    val objectiveRetrieved = objectiveRepository.findById(objectiveSaved.id)
+
+    assertThat(objectiveRetrieved.get().description).isEqualTo(objectiveSaved.description)
+  }
+
+  @Test
   fun `update an objective change description`(wireMockRuntimeInfo: WireMockRuntimeInfo) {
     val crn = "X123322Z"
 
@@ -197,6 +210,24 @@ class ObjectiveIntegrationTest {
         "objective for sp: $sentencePlanId",
         "Contemplation",
         setOf(Need("relationships")),
+      ),
+    ),
+  ) = objectMapper.readValue<Objective>(
+    mockMvc.perform(
+      post("/sentence-plan/$sentencePlanId/objective").withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl).json(json),
+    )
+      .andExpect(status().is2xxSuccessful)
+      .andReturn()
+      .response.contentAsString,
+  )
+
+  private fun createObjectiveWithoutNeed(
+    sentencePlanId: UUID,
+    wireMockRuntimeInfo: WireMockRuntimeInfo,
+    json: String = objectMapper.writeValueAsString(
+      CreateObjective(
+        "objective for sp: $sentencePlanId",
+        "Contemplation",
       ),
     ),
   ) = objectMapper.readValue<Objective>(

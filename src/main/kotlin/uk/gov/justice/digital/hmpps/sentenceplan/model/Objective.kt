@@ -8,13 +8,13 @@ data class Objective(
   val sentencePlanId: UUID,
   val description: String,
   val motivation: String?,
-  val needs: Set<Need>,
+  val needs: Set<Need> = setOf(),
 )
 
 data class CreateObjective(
   val description: String,
   val motivation: String?,
-  val needs: Set<Need>,
+  val needs: Set<Need> = setOf(),
 )
 
 data class Need(
