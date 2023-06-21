@@ -27,6 +27,9 @@ class ObjectiveEntity(
   var motivation: String?,
 
   @OneToMany(mappedBy = "objective")
+  val actions: MutableSet<ActionEntity> = mutableSetOf(),
+
+  @OneToMany(mappedBy = "objective")
   val needs: MutableSet<NeedEntity> = mutableSetOf(),
 ) {
 
@@ -43,7 +46,7 @@ interface ObjectiveRepository : JpaRepository<ObjectiveEntity, UUID> {
   fun findBySentencePlanId(sentencePlanId: UUID): List<ObjectiveEntity>
   fun findBySentencePlanIdAndId(sentencePlanId: UUID, id: UUID): ObjectiveEntity?
 
-  @EntityGraph(attributePaths = ["needs"])
+  @EntityGraph(attributePaths = ["needs", "actions"])
   override fun findById(id: UUID): Optional<ObjectiveEntity>
 }
 

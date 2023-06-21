@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
+import jakarta.transaction.Transactional
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -37,6 +38,7 @@ import java.util.UUID
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @WireMockTest
+@Transactional
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 class ObjectiveIntegrationTest {
   @Autowired
@@ -119,6 +121,7 @@ class ObjectiveIntegrationTest {
     val objectiveSaved = createObjective(sentencePlans[0].id, wireMockRuntimeInfo)
     val objectiveRetrieved = objectiveRepository.findById(objectiveSaved.id).orElseThrow()
     val objectiveModel = objectiveRetrieved.toModel()
+    val originalNeedsCount = objectiveModel.needs.size
     updateObjective(
       objectiveRetrieved.sentencePlan.id,
       objectiveModel.copy(needs = objectiveModel.needs + Need("Education")),
@@ -128,7 +131,7 @@ class ObjectiveIntegrationTest {
     val updatedObjectiveRetrieved = objectiveRepository.findById(objectiveSaved.id).orElseThrow()
 
     assertThat(updatedObjectiveRetrieved.description).isEqualTo(objectiveRetrieved.description)
-    assertThat(updatedObjectiveRetrieved.needs.size).isEqualTo(2)
+    assertThat(updatedObjectiveRetrieved.needs.size).isEqualTo(originalNeedsCount + 1)
   }
 
   @Test
@@ -189,6 +192,7 @@ class ObjectiveIntegrationTest {
     )
     assertThat(objectiveRetrieved.objectives.size).isEqualTo(1)
     assertThat(objectiveRetrieved.objectives[0].description).isEqualTo(objectiveSaved.description)
+    assertThat(objectiveRetrieved.objectives[0].actionsCount).isEqualTo(0)
   }
 
   private fun createSentencePlan(

@@ -218,6 +218,13 @@ class ActionIntegrationTest {
       .andExpect(jsonPath("$.actions[0].individualOwner").value(createAction.individualOwner))
       .andExpect(jsonPath("$.actions[0].practitionerOwner").value(createAction.practitionerOwner))
       .andExpect(jsonPath("$.actions[1].description").value(createActionTwo.description))
+
+    mockMvc.perform(
+      get("/sentence-plan/{sentencePlanId}/objective/{objectiveId}", sentencePlanId, objectiveId)
+        .withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl),
+    ).andExpect(status().is2xxSuccessful)
+      .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+      .andExpect(jsonPath("$.actionsCount").value(2))
   }
 
   @Test
