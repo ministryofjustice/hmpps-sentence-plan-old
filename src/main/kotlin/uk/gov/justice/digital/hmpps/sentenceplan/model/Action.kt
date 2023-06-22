@@ -33,7 +33,7 @@ data class CreateAction(
 
 fun ActionEntity.toModel() = Action(
   id,
-  objectiveId,
+  objective.id,
   description,
   interventionParticipation,
   interventionName,

@@ -18,9 +18,10 @@ class ActionService(
   private val actionRepository: ActionRepository,
 ) {
   fun createAction(sentencePlanId: UUID, objectiveId: UUID, action: CreateAction): Action {
-    if (!objectiveRepository.existsById(objectiveId)) throw NotFoundException("Objective", "id", objectiveId)
+    val objective = objectiveRepository.findById(objectiveId)
+      .orElseThrow { throw NotFoundException("Objective", "id", objectiveId) }
     val actionEntity = ActionEntity(
-      objectiveId,
+      objective,
       action.description,
       action.interventionParticipation,
       action.interventionName,
