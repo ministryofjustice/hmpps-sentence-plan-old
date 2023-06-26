@@ -24,8 +24,8 @@ data class CreateSentencePlan(
 )
 
 data class SentencePlanEngagement(
-  val riskFactors: String,
-  val protectiveFactors: String,
+  val riskFactors: String?,
+  val protectiveFactors: String?,
 )
 
 fun SentencePlanEntity.toModel() = SentencePlan(
