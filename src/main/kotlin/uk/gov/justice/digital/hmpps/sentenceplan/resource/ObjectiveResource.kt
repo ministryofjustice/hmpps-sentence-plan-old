@@ -34,7 +34,7 @@ class ObjectiveResource(private val service: ObjectiveService) {
     service.updateObjective(sentencePlanId, objective)
 
   @GetMapping
-  fun listSentencePlans(@PathVariable sentencePlanId: UUID) = service.listObjectives(sentencePlanId)
+  fun listObjectives(@PathVariable sentencePlanId: UUID) = service.listObjectives(sentencePlanId)
 
   @GetMapping("/{id}")
   fun getSentencePlanObjective(@PathVariable sentencePlanId: UUID, @PathVariable id: UUID) = service.findObjective(id)

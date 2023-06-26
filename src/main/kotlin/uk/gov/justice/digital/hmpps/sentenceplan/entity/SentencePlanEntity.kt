@@ -23,6 +23,10 @@ class SentencePlanEntity(
 
   val closedDate: ZonedDateTime? = null,
 
+  var riskFactors: String? = null,
+
+  var protectiveFactors: String? = null,
+
   @Id
   val id: UUID = UUID.randomUUID(),
 )

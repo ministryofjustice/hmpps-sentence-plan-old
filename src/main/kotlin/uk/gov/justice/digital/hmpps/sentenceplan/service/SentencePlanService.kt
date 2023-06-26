@@ -10,6 +10,7 @@ import uk.gov.justice.digital.hmpps.sentenceplan.exception.ConflictException
 import uk.gov.justice.digital.hmpps.sentenceplan.exception.NotFoundException
 import uk.gov.justice.digital.hmpps.sentenceplan.model.CreateSentencePlan
 import uk.gov.justice.digital.hmpps.sentenceplan.model.SentencePlan
+import uk.gov.justice.digital.hmpps.sentenceplan.model.SentencePlanEngagement
 import uk.gov.justice.digital.hmpps.sentenceplan.model.SentencePlanList
 import uk.gov.justice.digital.hmpps.sentenceplan.model.toModel
 import java.time.ZonedDateTime
@@ -37,6 +38,13 @@ class SentencePlanService(
     }
   }
 
+  fun updateSentencePlan(id: UUID, sentencePlanEngagement: SentencePlanEngagement): SentencePlan {
+    val sentencePlanEntity = findSentencePlanEntity(id)
+    sentencePlanEntity.riskFactors = sentencePlanEngagement.riskFactors
+    sentencePlanEntity.protectiveFactors = sentencePlanEngagement.protectiveFactors
+    return sentencePlanRepository.save(sentencePlanEntity).toModel()
+  }
+
   /**
    * Get all existing sentence plans for a crn.
    *
@@ -49,5 +57,8 @@ class SentencePlanService(
   )
 
   fun findSentencePlan(id: UUID): SentencePlan = sentencePlanRepository.findByIdOrNull(id)?.toModel()
+    ?: throw NotFoundException("SentencePlan", "id", id)
+
+  fun findSentencePlanEntity(id: UUID): SentencePlanEntity = sentencePlanRepository.findByIdOrNull(id)
     ?: throw NotFoundException("SentencePlan", "id", id)
 }
