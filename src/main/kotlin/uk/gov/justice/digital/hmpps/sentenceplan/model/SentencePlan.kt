@@ -15,10 +15,17 @@ data class SentencePlan(
     activeDate != null && activeDate.isBefore(ZonedDateTime.now()) -> "Active"
     else -> "Draft"
   },
+  val riskFactors: String? = null,
+  val protectiveFactors: String? = null,
 )
 
 data class CreateSentencePlan(
   val crn: String,
+)
+
+data class SentencePlanEngagement(
+  val riskFactors: String,
+  val protectiveFactors: String,
 )
 
 fun SentencePlanEntity.toModel() = SentencePlan(
@@ -27,4 +34,7 @@ fun SentencePlanEntity.toModel() = SentencePlan(
   createdDate = createdDate,
   activeDate = activeDate,
   closedDate = closedDate,
+  riskFactors = riskFactors,
+  protectiveFactors = protectiveFactors,
+
 )

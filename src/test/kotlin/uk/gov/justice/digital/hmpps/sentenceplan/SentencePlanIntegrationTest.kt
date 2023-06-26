@@ -15,6 +15,7 @@ import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import uk.gov.justice.digital.hmpps.security.json
@@ -28,7 +29,9 @@ import uk.gov.justice.digital.hmpps.sentenceplan.entity.SentencePlanRepository
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.getByCrn
 import uk.gov.justice.digital.hmpps.sentenceplan.model.CreateSentencePlan
 import uk.gov.justice.digital.hmpps.sentenceplan.model.SentencePlan
+import uk.gov.justice.digital.hmpps.sentenceplan.model.SentencePlanEngagement
 import java.time.ZonedDateTime
+import java.util.UUID
 
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
@@ -72,6 +75,19 @@ class SentencePlanIntegrationTest {
 
     val sentencePlans = sentencePlanRepository.findByPersonId(personRepository.getByCrn(crn).id)
     assertThat(sentencePlans).hasSize(1)
+  }
+
+  @Test
+  fun `update engagement details`(wireMockRuntimeInfo: WireMockRuntimeInfo) {
+    val crn = "X123321Z"
+
+    val sentencePlan = createSentencePlan(crn, wireMockRuntimeInfo)
+
+    updateEngagementDetails(sentencePlan.id, wireMockRuntimeInfo)
+
+    val updatedSentencePlan = sentencePlanRepository.findById(sentencePlan.id).orElseThrow()
+    assertThat(updatedSentencePlan.riskFactors).isEqualTo("some risk text")
+    assertThat(updatedSentencePlan.protectiveFactors).isEqualTo("some protective text")
   }
 
   @Test
@@ -123,7 +139,7 @@ class SentencePlanIntegrationTest {
 
   fun SentencePlanEntity.withClosedDate(
     closedDate: ZonedDateTime?,
-  ): SentencePlanEntity = SentencePlanEntity(person, createdDate, activeDate, closedDate, id)
+  ): SentencePlanEntity = SentencePlanEntity(person, createdDate, activeDate, closedDate, id = id)
 
   private fun createSentencePlan(
     crn: String,
@@ -131,6 +147,17 @@ class SentencePlanIntegrationTest {
     json: String = objectMapper.writeValueAsString(CreateSentencePlan(crn)),
   ) = objectMapper.readValue<SentencePlan>(
     mockMvc.perform(post("/sentence-plan").withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl).json(json))
+      .andExpect(status().is2xxSuccessful)
+      .andReturn()
+      .response.contentAsString,
+  )
+
+  private fun updateEngagementDetails(
+    id: UUID,
+    wireMockRuntimeInfo: WireMockRuntimeInfo,
+    json: String = objectMapper.writeValueAsString(SentencePlanEngagement("some risk text", "some protective text")),
+  ) = objectMapper.readValue<SentencePlan>(
+    mockMvc.perform(put("/sentence-plan/$id").withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl).json(json))
       .andExpect(status().is2xxSuccessful)
       .andReturn()
       .response.contentAsString,
