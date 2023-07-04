@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 import uk.gov.justice.digital.hmpps.sentenceplan.model.CreateSentencePlan
 import uk.gov.justice.digital.hmpps.sentenceplan.model.SentencePlan
-import uk.gov.justice.digital.hmpps.sentenceplan.model.SentencePlanEngagement
+import uk.gov.justice.digital.hmpps.sentenceplan.model.UpdateSentencePlan
 import uk.gov.justice.digital.hmpps.sentenceplan.service.SentencePlanService
 import java.util.UUID
 
@@ -31,6 +31,6 @@ class SentencePlanResource(private val service: SentencePlanService) {
   fun getSentencePlan(@PathVariable id: UUID) = service.findSentencePlan(id)
 
   @PutMapping("/{id}")
-  fun updateSentencePlan(@PathVariable id: UUID, @RequestBody sentencePlanEngagement: SentencePlanEngagement): SentencePlan =
-    service.updateSentencePlan(id, sentencePlanEngagement)
+  fun updateSentencePlan(@PathVariable id: UUID, @RequestBody updateSentencePlan: UpdateSentencePlan) =
+    service.updateSentencePlan(id, updateSentencePlan)
 }
