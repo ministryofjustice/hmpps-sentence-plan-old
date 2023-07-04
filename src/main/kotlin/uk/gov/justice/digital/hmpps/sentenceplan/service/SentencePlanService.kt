@@ -10,8 +10,8 @@ import uk.gov.justice.digital.hmpps.sentenceplan.exception.ConflictException
 import uk.gov.justice.digital.hmpps.sentenceplan.exception.NotFoundException
 import uk.gov.justice.digital.hmpps.sentenceplan.model.CreateSentencePlan
 import uk.gov.justice.digital.hmpps.sentenceplan.model.SentencePlan
-import uk.gov.justice.digital.hmpps.sentenceplan.model.SentencePlanEngagement
 import uk.gov.justice.digital.hmpps.sentenceplan.model.SentencePlanList
+import uk.gov.justice.digital.hmpps.sentenceplan.model.UpdateSentencePlan
 import uk.gov.justice.digital.hmpps.sentenceplan.model.toModel
 import java.time.ZonedDateTime
 import java.util.UUID
@@ -38,10 +38,12 @@ class SentencePlanService(
     }
   }
 
-  fun updateSentencePlan(id: UUID, sentencePlanEngagement: SentencePlanEngagement): SentencePlan {
+  fun updateSentencePlan(id: UUID, updateSentencePlan: UpdateSentencePlan): SentencePlan {
     val sentencePlanEntity = findSentencePlanEntity(id)
-    sentencePlanEntity.riskFactors = sentencePlanEngagement.riskFactors
-    sentencePlanEntity.protectiveFactors = sentencePlanEngagement.protectiveFactors
+    sentencePlanEntity.riskFactors = updateSentencePlan.riskFactors
+    sentencePlanEntity.protectiveFactors = updateSentencePlan.protectiveFactors
+    sentencePlanEntity.practitionerComments = updateSentencePlan.practitionerComments
+    sentencePlanEntity.individualComments = updateSentencePlan.individualComments
     return sentencePlanRepository.save(sentencePlanEntity).toModel()
   }
 

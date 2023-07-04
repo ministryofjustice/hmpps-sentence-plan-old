@@ -27,6 +27,10 @@ class SentencePlanEntity(
 
   var protectiveFactors: String? = null,
 
+  var practitionerComments: String? = null,
+
+  var individualComments: String? = null,
+
   @Id
   val id: UUID = UUID.randomUUID(),
 )

@@ -17,15 +17,19 @@ data class SentencePlan(
   },
   val riskFactors: String? = null,
   val protectiveFactors: String? = null,
+  val practitionerComments: String? = null,
+  val individualComments: String? = null,
 )
 
 data class CreateSentencePlan(
   val crn: String,
 )
 
-data class SentencePlanEngagement(
-  val riskFactors: String?,
-  val protectiveFactors: String?,
+data class UpdateSentencePlan(
+  val riskFactors: String? = null,
+  val protectiveFactors: String? = null,
+  val practitionerComments: String? = null,
+  val individualComments: String? = null,
 )
 
 fun SentencePlanEntity.toModel() = SentencePlan(
@@ -36,5 +40,6 @@ fun SentencePlanEntity.toModel() = SentencePlan(
   closedDate = closedDate,
   riskFactors = riskFactors,
   protectiveFactors = protectiveFactors,
-
+  practitionerComments = practitionerComments,
+  individualComments = individualComments,
 )

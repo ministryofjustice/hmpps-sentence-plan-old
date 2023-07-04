@@ -29,7 +29,7 @@ import uk.gov.justice.digital.hmpps.sentenceplan.entity.SentencePlanRepository
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.getByCrn
 import uk.gov.justice.digital.hmpps.sentenceplan.model.CreateSentencePlan
 import uk.gov.justice.digital.hmpps.sentenceplan.model.SentencePlan
-import uk.gov.justice.digital.hmpps.sentenceplan.model.SentencePlanEngagement
+import uk.gov.justice.digital.hmpps.sentenceplan.model.UpdateSentencePlan
 import java.time.ZonedDateTime
 import java.util.UUID
 
@@ -78,16 +78,27 @@ class SentencePlanIntegrationTest {
   }
 
   @Test
-  fun `update engagement details`(wireMockRuntimeInfo: WireMockRuntimeInfo) {
+  fun `update sentence plan`(wireMockRuntimeInfo: WireMockRuntimeInfo) {
     val crn = "X123321Z"
 
     val sentencePlan = createSentencePlan(crn, wireMockRuntimeInfo)
 
-    updateEngagementDetails(sentencePlan.id, wireMockRuntimeInfo)
+    updateSentencePlan(
+      sentencePlan.id,
+      wireMockRuntimeInfo,
+      UpdateSentencePlan(
+        riskFactors = "some risk text",
+        protectiveFactors = "some protective text",
+        practitionerComments = "my comments",
+        individualComments = "their comments",
+      ),
+    )
 
     val updatedSentencePlan = sentencePlanRepository.findById(sentencePlan.id).orElseThrow()
     assertThat(updatedSentencePlan.riskFactors).isEqualTo("some risk text")
     assertThat(updatedSentencePlan.protectiveFactors).isEqualTo("some protective text")
+    assertThat(updatedSentencePlan.practitionerComments).isEqualTo("my comments")
+    assertThat(updatedSentencePlan.individualComments).isEqualTo("their comments")
   }
 
   @Test
@@ -152,12 +163,15 @@ class SentencePlanIntegrationTest {
       .response.contentAsString,
   )
 
-  private fun updateEngagementDetails(
+  private fun updateSentencePlan(
     id: UUID,
     wireMockRuntimeInfo: WireMockRuntimeInfo,
-    json: String = objectMapper.writeValueAsString(SentencePlanEngagement("some risk text", "some protective text")),
+    updateSentencePlan: UpdateSentencePlan,
   ) = objectMapper.readValue<SentencePlan>(
-    mockMvc.perform(put("/sentence-plan/$id").withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl).json(json))
+    mockMvc.perform(
+      put("/sentence-plan/$id").withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl)
+        .json(objectMapper.writeValueAsString(updateSentencePlan)),
+    )
       .andExpect(status().is2xxSuccessful)
       .andReturn()
       .response.contentAsString,
