@@ -27,10 +27,10 @@ class ObjectiveEntity(
 
   var motivation: String?,
 
-  @OneToMany(mappedBy = "objective", cascade = [CascadeType.ALL])
+  @OneToMany(mappedBy = "objective", cascade = [CascadeType.REMOVE])
   val actions: MutableSet<ActionEntity> = mutableSetOf(),
 
-  @OneToMany(mappedBy = "objective", cascade = [CascadeType.ALL])
+  @OneToMany(mappedBy = "objective", cascade = [CascadeType.REMOVE])
   val needs: MutableSet<NeedEntity> = mutableSetOf(),
 ) {
 
