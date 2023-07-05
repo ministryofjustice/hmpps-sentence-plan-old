@@ -1,5 +1,6 @@
 package uk.gov.justice.digital.hmpps.sentenceplan.entity
 
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
 import jakarta.persistence.JoinColumn
@@ -26,10 +27,10 @@ class ObjectiveEntity(
 
   var motivation: String?,
 
-  @OneToMany(mappedBy = "objective")
+  @OneToMany(mappedBy = "objective", cascade = [CascadeType.ALL])
   val actions: MutableSet<ActionEntity> = mutableSetOf(),
 
-  @OneToMany(mappedBy = "objective")
+  @OneToMany(mappedBy = "objective", cascade = [CascadeType.ALL])
   val needs: MutableSet<NeedEntity> = mutableSetOf(),
 ) {
 
@@ -45,6 +46,8 @@ class ObjectiveEntity(
 interface ObjectiveRepository : JpaRepository<ObjectiveEntity, UUID> {
   fun findBySentencePlanId(sentencePlanId: UUID): List<ObjectiveEntity>
   fun findBySentencePlanIdAndId(sentencePlanId: UUID, id: UUID): ObjectiveEntity?
+
+  fun deleteAllBySentencePlan(sentencePlanEntity: SentencePlanEntity)
 
   @EntityGraph(attributePaths = ["needs", "actions"])
   override fun findById(id: UUID): Optional<ObjectiveEntity>
