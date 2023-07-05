@@ -1,7 +1,9 @@
 package uk.gov.justice.digital.hmpps.sentenceplan.service
 
+import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
+import uk.gov.justice.digital.hmpps.sentenceplan.entity.ObjectiveRepository
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.PersonEntity
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.PersonRepository
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.SentencePlanEntity
@@ -20,6 +22,7 @@ import java.util.UUID
 class SentencePlanService(
   private val personRepository: PersonRepository,
   private val sentencePlanRepository: SentencePlanRepository,
+  private val objectiveRepository: ObjectiveRepository,
 ) {
 
   /**
@@ -63,4 +66,12 @@ class SentencePlanService(
 
   fun findSentencePlanEntity(id: UUID): SentencePlanEntity = sentencePlanRepository.findByIdOrNull(id)
     ?: throw NotFoundException("SentencePlan", "id", id)
+
+  @Transactional
+  fun deleteSentencePlan(id: UUID) {
+    val sentencePlan = sentencePlanRepository.findByIdOrNull(id)
+      ?: throw NotFoundException("SentencePlan", "id", id)
+    objectiveRepository.deleteAllBySentencePlan(sentencePlan)
+    sentencePlanRepository.delete(sentencePlan)
+  }
 }

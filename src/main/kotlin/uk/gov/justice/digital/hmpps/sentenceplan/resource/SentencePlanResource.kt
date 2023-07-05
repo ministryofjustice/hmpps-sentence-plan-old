@@ -1,6 +1,7 @@
 package uk.gov.justice.digital.hmpps.sentenceplan.resource
 
 import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -29,6 +30,9 @@ class SentencePlanResource(private val service: SentencePlanService) {
 
   @GetMapping("/{id}")
   fun getSentencePlan(@PathVariable id: UUID) = service.findSentencePlan(id)
+
+  @DeleteMapping("/{id}")
+  fun deleteSentencePlan(@PathVariable id: UUID) = service.deleteSentencePlan(id)
 
   @PutMapping("/{id}")
   fun updateSentencePlan(@PathVariable id: UUID, @RequestBody updateSentencePlan: UpdateSentencePlan) =

@@ -340,4 +340,76 @@ class ActionIntegrationTest {
       .andReturn()
       .response.contentAsString,
   )
+
+  @Test
+  fun `delete an objective with a single action`(wireMockRuntimeInfo: WireMockRuntimeInfo) {
+    val sentencePlanId = createSentencePlan("C123123X", wireMockRuntimeInfo).id
+    val objectiveId = createObjective(sentencePlanId, wireMockRuntimeInfo).id
+    val createAction = CreateAction(
+      "Test Action",
+      true,
+      "INT123",
+      "local",
+      "TODO",
+      individualOwner = true,
+      practitionerOwner = false,
+      otherOwner = "Social worker",
+    )
+
+    mockMvc.perform(
+      post("/sentence-plan/{sentencePlanId}/objective/{objectiveId}/action", sentencePlanId, objectiveId)
+        .withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(createAction)),
+    )
+      .andReturn()
+      .response.contentAsString
+
+    mockMvc.perform(
+      delete(
+        "/sentence-plan/{sentencePlanId}/objective/{objectiveId}",
+        sentencePlanId,
+        objectiveId,
+      )
+        .withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl),
+    )
+
+    Assertions.assertTrue(objectiveRepository.findById(objectiveId).isEmpty)
+  }
+
+  @Test
+  fun `delete sentence plan with an objective and actiona action`(wireMockRuntimeInfo: WireMockRuntimeInfo) {
+    val sentencePlanId = createSentencePlan("C123123X", wireMockRuntimeInfo).id
+    val objectiveId = createObjective(sentencePlanId, wireMockRuntimeInfo).id
+    val createAction = CreateAction(
+      "Test Action",
+      true,
+      "INT123",
+      "local",
+      "TODO",
+      individualOwner = true,
+      practitionerOwner = false,
+      otherOwner = "Social worker",
+    )
+
+    mockMvc.perform(
+      post("/sentence-plan/{sentencePlanId}/objective/{objectiveId}/action", sentencePlanId, objectiveId)
+        .withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl)
+        .contentType(MediaType.APPLICATION_JSON)
+        .content(objectMapper.writeValueAsString(createAction)),
+    )
+      .andReturn()
+      .response.contentAsString
+
+    mockMvc.perform(
+      delete(
+        "/sentence-plan/{sentencePlanId}",
+        sentencePlanId,
+        objectiveId,
+      )
+        .withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl),
+    )
+
+    Assertions.assertTrue(sentencePlanRepository.findById(sentencePlanId).isEmpty)
+  }
 }

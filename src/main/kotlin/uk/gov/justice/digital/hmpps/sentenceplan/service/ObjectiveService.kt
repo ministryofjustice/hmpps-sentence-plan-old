@@ -70,4 +70,10 @@ class ObjectiveService(
 
   fun findObjective(id: UUID): Objective = objectiveRepository.findByIdOrNull(id)?.toModel()
     ?: throw NotFoundException("Objective", "id", id)
+
+  fun deleteObjective(id: UUID) {
+    val objective = objectiveRepository.findByIdOrNull(id)
+      ?: throw NotFoundException("Objective", "id", id)
+    objectiveRepository.delete(objective)
+  }
 }
