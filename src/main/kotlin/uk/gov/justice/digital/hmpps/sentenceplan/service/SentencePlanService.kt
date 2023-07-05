@@ -3,7 +3,6 @@ package uk.gov.justice.digital.hmpps.sentenceplan.service
 import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
-import uk.gov.justice.digital.hmpps.sentenceplan.entity.ActionRepository
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.ObjectiveRepository
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.PersonEntity
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.PersonRepository

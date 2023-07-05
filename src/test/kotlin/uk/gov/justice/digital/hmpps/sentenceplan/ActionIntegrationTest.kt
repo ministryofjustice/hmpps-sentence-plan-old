@@ -341,7 +341,6 @@ class ActionIntegrationTest {
       .response.contentAsString,
   )
 
-
   @Test
   fun `delete an objective with a single action`(wireMockRuntimeInfo: WireMockRuntimeInfo) {
     val sentencePlanId = createSentencePlan("C123123X", wireMockRuntimeInfo).id
@@ -366,12 +365,11 @@ class ActionIntegrationTest {
       .andReturn()
       .response.contentAsString
 
-
     mockMvc.perform(
       delete(
         "/sentence-plan/{sentencePlanId}/objective/{objectiveId}",
         sentencePlanId,
-        objectiveId
+        objectiveId,
       )
         .withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl),
     )
@@ -403,12 +401,11 @@ class ActionIntegrationTest {
       .andReturn()
       .response.contentAsString
 
-
     mockMvc.perform(
       delete(
         "/sentence-plan/{sentencePlanId}",
         sentencePlanId,
-        objectiveId
+        objectiveId,
       )
         .withOAuth2Token(wireMockRuntimeInfo.httpBaseUrl),
     )
