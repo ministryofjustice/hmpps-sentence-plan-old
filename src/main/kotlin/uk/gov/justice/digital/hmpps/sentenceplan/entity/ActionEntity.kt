@@ -23,6 +23,8 @@ class ActionEntity(
   var individualOwner: Boolean = false,
   var practitionerOwner: Boolean = false,
   var otherOwner: String?,
+  var targetDateMonth: Int,
+  var targetDateYear: Int,
   val createdDateTime: ZonedDateTime = ZonedDateTime.now(),
   @Id
   val id: UUID = UUID.randomUUID(),
