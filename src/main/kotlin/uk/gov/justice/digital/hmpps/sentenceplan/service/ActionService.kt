@@ -30,6 +30,8 @@ class ActionService(
       action.individualOwner,
       action.practitionerOwner,
       action.otherOwner,
+      action.targetDateMonth,
+      action.targetDateYear,
     )
 
     actionRepository.save(actionEntity)
@@ -46,6 +48,8 @@ class ActionService(
     actionEntity.individualOwner = action.individualOwner
     actionEntity.practitionerOwner = action.practitionerOwner
     actionEntity.otherOwner = action.otherOwner
+    actionEntity.targetDateMonth = action.targetDateMonth
+    actionEntity.targetDateYear = action.targetDateYear
     return actionRepository.save(actionEntity).toModel()
   }
 

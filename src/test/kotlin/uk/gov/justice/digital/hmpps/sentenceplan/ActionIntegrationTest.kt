@@ -84,6 +84,8 @@ class ActionIntegrationTest {
       individualOwner = true,
       practitionerOwner = false,
       otherOwner = "Social worker",
+      targetDateMonth = 11,
+      targetDateYear = 2022,
     )
 
     mockMvc.perform(
@@ -102,6 +104,8 @@ class ActionIntegrationTest {
       .andExpect(jsonPath("$.otherOwner").value(createAction.otherOwner))
       .andExpect(jsonPath("$.individualOwner").value(createAction.individualOwner))
       .andExpect(jsonPath("$.practitionerOwner").value(createAction.practitionerOwner))
+      .andExpect(jsonPath("$.targetDateMonth").value(createAction.targetDateMonth))
+      .andExpect(jsonPath("$.targetDateYear").value(createAction.targetDateYear))
 
     Assertions.assertEquals(actionRepository.findAllByObjectiveIdOrderByCreatedDateTimeAsc(objectiveId).size, 1)
   }
@@ -119,6 +123,8 @@ class ActionIntegrationTest {
       individualOwner = true,
       practitionerOwner = false,
       otherOwner = "Social worker",
+      targetDateMonth = 11,
+      targetDateYear = 2022,
     )
 
     val actionRetrieved = objectMapper.readValue<Action>(
@@ -150,6 +156,8 @@ class ActionIntegrationTest {
       .andExpect(jsonPath("$.otherOwner").value(createAction.otherOwner))
       .andExpect(jsonPath("$.individualOwner").value(createAction.individualOwner))
       .andExpect(jsonPath("$.practitionerOwner").value(createAction.practitionerOwner))
+      .andExpect(jsonPath("$.targetDateMonth").value(createAction.targetDateMonth))
+      .andExpect(jsonPath("$.targetDateYear").value(createAction.targetDateYear))
   }
 
   @Test
@@ -165,6 +173,8 @@ class ActionIntegrationTest {
       individualOwner = true,
       practitionerOwner = false,
       otherOwner = "Social worker",
+      targetDateMonth = 11,
+      targetDateYear = 2022,
     )
 
     val actionRetrieved = objectMapper.readValue<Action>(
@@ -187,6 +197,8 @@ class ActionIntegrationTest {
       individualOwner = true,
       practitionerOwner = false,
       otherOwner = "Social worker",
+      targetDateMonth = 11,
+      targetDateYear = 2022,
     )
 
     val actionRetrievedTwo = objectMapper.readValue<Action>(
@@ -240,6 +252,8 @@ class ActionIntegrationTest {
       individualOwner = true,
       practitionerOwner = false,
       otherOwner = "Social worker",
+      targetDateMonth = 11,
+      targetDateYear = 2022,
     )
 
     val actionRetrieved = objectMapper.readValue<Action>(
@@ -279,6 +293,8 @@ class ActionIntegrationTest {
       individualOwner = true,
       practitionerOwner = false,
       otherOwner = "Social worker",
+      targetDateMonth = 11,
+      targetDateYear = 2022,
     )
 
     val actionRetrieved = objectMapper.readValue<Action>(
@@ -354,6 +370,8 @@ class ActionIntegrationTest {
       individualOwner = true,
       practitionerOwner = false,
       otherOwner = "Social worker",
+      targetDateMonth = 11,
+      targetDateYear = 2022,
     )
 
     mockMvc.perform(
@@ -390,6 +408,8 @@ class ActionIntegrationTest {
       individualOwner = true,
       practitionerOwner = false,
       otherOwner = "Social worker",
+      targetDateMonth = 11,
+      targetDateYear = 2022,
     )
 
     mockMvc.perform(

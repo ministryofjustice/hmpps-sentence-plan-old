@@ -18,6 +18,8 @@ data class Action(
   val individualOwner: Boolean = false,
   val practitionerOwner: Boolean = false,
   val otherOwner: String?,
+  val targetDateMonth: Int,
+  val targetDateYear: Int,
 )
 
 data class CreateAction(
@@ -29,6 +31,8 @@ data class CreateAction(
   val individualOwner: Boolean = false,
   val practitionerOwner: Boolean = false,
   val otherOwner: String?,
+  val targetDateMonth: Int,
+  val targetDateYear: Int,
 )
 
 fun ActionEntity.toModel() = Action(
@@ -42,4 +46,6 @@ fun ActionEntity.toModel() = Action(
   individualOwner,
   practitionerOwner,
   otherOwner,
+  targetDateMonth,
+  targetDateYear,
 )
