@@ -6,7 +6,6 @@ import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.Table
 import org.springframework.data.jpa.repository.JpaRepository
-import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import uk.gov.justice.digital.hmpps.sentenceplan.exception.NotFoundException
 import java.time.ZonedDateTime
@@ -40,16 +39,16 @@ class SentencePlanEntity(
 interface SentencePlanRepository : JpaRepository<SentencePlanEntity, UUID> {
   fun existsByPersonIdAndClosedDateIsNull(personId: UUID): Boolean
 
-  @Modifying
   @Query(
     """
-    update SentencePlan sp
-    set sp.closedDate = :closedDate
+    select case when count(sp) = 0 then false else true end
+    from SentencePlan sp
     where sp.person.id = :personId
-    and sp.id <> :newPlanId
+    and sp.closedDate is null
+    and sp.id <> :sentencePlanId
   """,
   )
-  fun closeExistingActiveSentencePlan(personId: UUID, newPlanId: UUID, closedDate: ZonedDateTime)
+  fun existsAnotherActiveSentencePlan(personId: UUID, sentencePlanId: UUID): Boolean
   fun findByPersonId(personId: UUID): List<SentencePlanEntity>
 }
 

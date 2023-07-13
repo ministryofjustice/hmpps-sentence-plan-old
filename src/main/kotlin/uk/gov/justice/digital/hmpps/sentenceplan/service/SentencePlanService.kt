@@ -17,6 +17,7 @@ import uk.gov.justice.digital.hmpps.sentenceplan.model.UpdateSentencePlan
 import uk.gov.justice.digital.hmpps.sentenceplan.model.toModel
 import java.time.ZonedDateTime
 import java.util.UUID
+
 @Transactional
 @Service
 class SentencePlanService(
@@ -35,7 +36,7 @@ class SentencePlanService(
 
     return when {
       sentencePlanRepository.existsByPersonIdAndClosedDateIsNull(person.id) ->
-        throw ConflictException("Sentence plan already exists for $sentencePlanRequest.crn")
+        throw ConflictException("Sentence plan already exists for ${sentencePlanRequest.crn}")
 
       else -> sentencePlanRepository.save(SentencePlanEntity(person, ZonedDateTime.now())).toModel()
     }
@@ -48,7 +49,9 @@ class SentencePlanService(
     sentencePlanEntity.practitionerComments = updateSentencePlan.practitionerComments
     sentencePlanEntity.individualComments = updateSentencePlan.individualComments
     updateSentencePlan.activeDate?.let {
-      sentencePlanRepository.closeExistingActiveSentencePlan(sentencePlanEntity.person.id, id, it)
+      if (sentencePlanRepository.existsAnotherActiveSentencePlan(sentencePlanEntity.person.id, id)) {
+        throw ConflictException("Sentence plan already exists for ${sentencePlanEntity.person.crn}")
+      }
       sentencePlanEntity.activeDate = it
     }
     return sentencePlanRepository.save(sentencePlanEntity).toModel()
