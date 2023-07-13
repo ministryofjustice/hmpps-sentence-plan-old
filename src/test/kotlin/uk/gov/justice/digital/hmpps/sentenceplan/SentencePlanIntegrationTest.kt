@@ -23,6 +23,7 @@ import uk.gov.justice.digital.hmpps.security.withOAuth2Token
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.ActionRepository
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.NeedRepository
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.ObjectiveRepository
+import uk.gov.justice.digital.hmpps.sentenceplan.entity.PersonEntity
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.PersonRepository
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.SentencePlanEntity
 import uk.gov.justice.digital.hmpps.sentenceplan.entity.SentencePlanRepository
@@ -146,6 +147,59 @@ class SentencePlanIntegrationTest {
       .andExpect(status().isOk)
       .andExpect(jsonPath("$.id").value(sentencePlan.id.toString()))
       .andExpect(jsonPath("$.crn").value(crn))
+  }
+
+  @Test
+  fun `sentence plan can be made active`(wireMockRuntimeInfo: WireMockRuntimeInfo) {
+    val crn = "A123321"
+
+    val sentencePlan = createSentencePlan(crn, wireMockRuntimeInfo)
+    val activeAt = ZonedDateTime.now()
+
+    updateSentencePlan(
+      sentencePlan.id,
+      wireMockRuntimeInfo,
+      UpdateSentencePlan(
+        activeDate = activeAt,
+      ),
+    )
+
+    val updatedSentencePlan = sentencePlanRepository.findById(sentencePlan.id).orElseThrow()
+    assertThat(updatedSentencePlan.activeDate).isEqualTo(activeAt)
+  }
+
+  @Test
+  fun `active sentence plan closes existing active one`(wireMockRuntimeInfo: WireMockRuntimeInfo) {
+    val person = personRepository.save(PersonEntity("R123456"))
+    val existingPlan = sentencePlanRepository.save(
+      SentencePlanEntity(
+        person,
+        ZonedDateTime.now().minusDays(1),
+        activeDate = ZonedDateTime.now().minusDays(1),
+      ),
+    )
+
+    val replacementPlan = sentencePlanRepository.save(
+      SentencePlanEntity(
+        person,
+        ZonedDateTime.now(),
+        activeDate = ZonedDateTime.now(),
+      ),
+    )
+
+    val activeAt = ZonedDateTime.now()
+    updateSentencePlan(
+      replacementPlan.id,
+      wireMockRuntimeInfo,
+      UpdateSentencePlan(
+        activeDate = activeAt,
+      ),
+    )
+
+    val existing = sentencePlanRepository.findById(existingPlan.id).orElseThrow()
+    assertThat(existing.closedDate).isEqualTo(activeAt)
+    val replacement = sentencePlanRepository.findById(replacementPlan.id).orElseThrow()
+    assertThat(replacement.activeDate).isEqualTo(activeAt)
   }
 
   fun SentencePlanEntity.withClosedDate(

@@ -17,7 +17,7 @@ import uk.gov.justice.digital.hmpps.sentenceplan.model.UpdateSentencePlan
 import uk.gov.justice.digital.hmpps.sentenceplan.model.toModel
 import java.time.ZonedDateTime
 import java.util.UUID
-
+@Transactional
 @Service
 class SentencePlanService(
   private val personRepository: PersonRepository,
@@ -47,6 +47,10 @@ class SentencePlanService(
     sentencePlanEntity.protectiveFactors = updateSentencePlan.protectiveFactors
     sentencePlanEntity.practitionerComments = updateSentencePlan.practitionerComments
     sentencePlanEntity.individualComments = updateSentencePlan.individualComments
+    updateSentencePlan.activeDate?.let {
+      sentencePlanRepository.closeExistingActiveSentencePlan(sentencePlanEntity.person.id, id, it)
+      sentencePlanEntity.activeDate = it
+    }
     return sentencePlanRepository.save(sentencePlanEntity).toModel()
   }
 
@@ -67,7 +71,6 @@ class SentencePlanService(
   fun findSentencePlanEntity(id: UUID): SentencePlanEntity = sentencePlanRepository.findByIdOrNull(id)
     ?: throw NotFoundException("SentencePlan", "id", id)
 
-  @Transactional
   fun deleteSentencePlan(id: UUID) {
     val sentencePlan = sentencePlanRepository.findByIdOrNull(id)
       ?: throw NotFoundException("SentencePlan", "id", id)
