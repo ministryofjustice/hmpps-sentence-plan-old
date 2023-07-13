@@ -18,6 +18,7 @@ import uk.gov.justice.digital.hmpps.sentenceplan.model.toModel
 import java.time.ZonedDateTime
 import java.util.UUID
 
+@Transactional
 @Service
 class SentencePlanService(
   private val personRepository: PersonRepository,
@@ -35,7 +36,7 @@ class SentencePlanService(
 
     return when {
       sentencePlanRepository.existsByPersonIdAndClosedDateIsNull(person.id) ->
-        throw ConflictException("Sentence plan already exists for $sentencePlanRequest.crn")
+        throw ConflictException("Sentence plan already exists for ${sentencePlanRequest.crn}")
 
       else -> sentencePlanRepository.save(SentencePlanEntity(person, ZonedDateTime.now())).toModel()
     }
@@ -47,6 +48,12 @@ class SentencePlanService(
     sentencePlanEntity.protectiveFactors = updateSentencePlan.protectiveFactors
     sentencePlanEntity.practitionerComments = updateSentencePlan.practitionerComments
     sentencePlanEntity.individualComments = updateSentencePlan.individualComments
+    updateSentencePlan.activeDate?.let {
+      if (sentencePlanRepository.existsAnotherActiveSentencePlan(sentencePlanEntity.person.id, id)) {
+        throw ConflictException("Sentence plan already exists for ${sentencePlanEntity.person.crn}")
+      }
+      sentencePlanEntity.activeDate = it
+    }
     return sentencePlanRepository.save(sentencePlanEntity).toModel()
   }
 
@@ -67,7 +74,6 @@ class SentencePlanService(
   fun findSentencePlanEntity(id: UUID): SentencePlanEntity = sentencePlanRepository.findByIdOrNull(id)
     ?: throw NotFoundException("SentencePlan", "id", id)
 
-  @Transactional
   fun deleteSentencePlan(id: UUID) {
     val sentencePlan = sentencePlanRepository.findByIdOrNull(id)
       ?: throw NotFoundException("SentencePlan", "id", id)

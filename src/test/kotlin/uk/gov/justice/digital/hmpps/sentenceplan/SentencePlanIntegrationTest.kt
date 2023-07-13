@@ -148,6 +148,25 @@ class SentencePlanIntegrationTest {
       .andExpect(jsonPath("$.crn").value(crn))
   }
 
+  @Test
+  fun `sentence plan can be made active`(wireMockRuntimeInfo: WireMockRuntimeInfo) {
+    val crn = "A123321"
+
+    val sentencePlan = createSentencePlan(crn, wireMockRuntimeInfo)
+    val activeAt = ZonedDateTime.now()
+
+    updateSentencePlan(
+      sentencePlan.id,
+      wireMockRuntimeInfo,
+      UpdateSentencePlan(
+        activeDate = activeAt,
+      ),
+    )
+
+    val updatedSentencePlan = sentencePlanRepository.findById(sentencePlan.id).orElseThrow()
+    assertThat(updatedSentencePlan.activeDate).isNotNull()
+  }
+
   fun SentencePlanEntity.withClosedDate(
     closedDate: ZonedDateTime?,
   ): SentencePlanEntity = SentencePlanEntity(person, createdDate, activeDate, closedDate, id = id)

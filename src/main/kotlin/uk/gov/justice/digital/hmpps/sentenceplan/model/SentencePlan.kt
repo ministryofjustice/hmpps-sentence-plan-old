@@ -30,6 +30,7 @@ data class UpdateSentencePlan(
   val protectiveFactors: String? = null,
   val practitionerComments: String? = null,
   val individualComments: String? = null,
+  val activeDate: ZonedDateTime? = null,
 )
 
 fun SentencePlanEntity.toModel() = SentencePlan(
