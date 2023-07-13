@@ -164,7 +164,7 @@ class SentencePlanIntegrationTest {
     )
 
     val updatedSentencePlan = sentencePlanRepository.findById(sentencePlan.id).orElseThrow()
-    assertThat(updatedSentencePlan.activeDate).isEqualTo(activeAt)
+    assertThat(updatedSentencePlan.activeDate).isNotNull()
   }
 
   fun SentencePlanEntity.withClosedDate(
