@@ -164,7 +164,35 @@ class SentencePlanIntegrationTest {
     )
 
     val updatedSentencePlan = sentencePlanRepository.findById(sentencePlan.id).orElseThrow()
-    assertThat(updatedSentencePlan.activeDate).isNotNull()
+    assertThat(updatedSentencePlan.activeDate).isNotNull
+  }
+
+  @Test
+  fun `sentence plan can be closed`(wireMockRuntimeInfo: WireMockRuntimeInfo) {
+    val crn = "A123321"
+
+    val sentencePlan = createSentencePlan(crn, wireMockRuntimeInfo)
+    val activeAt = ZonedDateTime.now()
+
+    updateSentencePlan(
+      sentencePlan.id,
+      wireMockRuntimeInfo,
+      UpdateSentencePlan(
+        activeDate = activeAt,
+      ),
+    )
+    val closedDate = ZonedDateTime.now()
+
+    updateSentencePlan(
+      sentencePlan.id,
+      wireMockRuntimeInfo,
+      UpdateSentencePlan(
+        closedDate = closedDate,
+      ),
+    )
+
+    val updatedSentencePlan = sentencePlanRepository.findById(sentencePlan.id).orElseThrow()
+    assertThat(updatedSentencePlan.closedDate).isNotNull
   }
 
   fun SentencePlanEntity.withClosedDate(
