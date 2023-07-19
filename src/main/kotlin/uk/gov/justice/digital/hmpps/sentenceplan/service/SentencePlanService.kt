@@ -54,6 +54,12 @@ class SentencePlanService(
       }
       sentencePlanEntity.activeDate = it
     }
+    updateSentencePlan.closedDate?.let {
+      if (sentencePlanEntity.activeDate == null) {
+        throw ConflictException("Only active sentence plans can be closed")
+      }
+      sentencePlanEntity.closedDate = it
+    }
     return sentencePlanRepository.save(sentencePlanEntity).toModel()
   }
 
