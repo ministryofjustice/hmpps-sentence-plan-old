@@ -8,7 +8,7 @@ data class Objective(
   val sentencePlanId: UUID,
   val description: String,
   val motivation: String?,
-  val status: String,
+  val status: String?,
   val actionsCount: Int,
   val needs: Set<Need> = setOf(),
 )
