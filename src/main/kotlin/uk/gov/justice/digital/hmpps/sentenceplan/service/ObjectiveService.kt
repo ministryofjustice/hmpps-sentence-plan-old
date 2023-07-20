@@ -51,6 +51,7 @@ class ObjectiveService(
     val removedNeeds = original.needs.filter { objective.needs.none { on -> it.code == on.code } }.toSet()
     original.description = objective.description
     original.motivation = objective.motivation
+    original.status = objective.status
     original.addNeeds(newNeedEntities)
     original.removeNeeds(removedNeeds)
     needRepository.saveAll(newNeedEntities)
