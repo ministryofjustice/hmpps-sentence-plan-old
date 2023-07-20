@@ -27,6 +27,8 @@ class ObjectiveEntity(
 
   var motivation: String?,
 
+  var status: String?,
+
   @OneToMany(mappedBy = "objective", cascade = [CascadeType.REMOVE])
   val actions: MutableSet<ActionEntity> = mutableSetOf(),
 

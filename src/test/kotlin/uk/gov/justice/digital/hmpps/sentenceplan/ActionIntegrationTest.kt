@@ -345,6 +345,7 @@ class ActionIntegrationTest {
       CreateObjective(
         "objective for sp: $sentencePlanId",
         "Contemplation",
+        "completed",
         setOf(Need("relationships")),
       ),
     ),

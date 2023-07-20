@@ -8,6 +8,7 @@ data class Objective(
   val sentencePlanId: UUID,
   val description: String,
   val motivation: String?,
+  val status: String?,
   val actionsCount: Int,
   val needs: Set<Need> = setOf(),
 )
@@ -15,6 +16,7 @@ data class Objective(
 data class CreateObjective(
   val description: String,
   val motivation: String?,
+  val status: String,
   val needs: Set<Need> = setOf(),
 )
 
@@ -28,6 +30,7 @@ fun ObjectiveEntity.toModel() = Objective(
   sentencePlanId = sentencePlan.id,
   description = description,
   motivation = motivation,
+  status = status,
   actionsCount = actions.size,
   needs = this.needs.map { Need(it.code, it.id) }.toSet(),
 )

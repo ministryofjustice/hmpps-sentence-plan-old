@@ -35,6 +35,7 @@ class ObjectiveService(
       sentencePlan,
       description = objective.description,
       motivation = objective.motivation,
+      status = objective.status,
     )
     objectiveRepository.save(objectiveEntity)
     val needEntities = needRepository.saveAll(objective.needs.map { NeedEntity(code = it.code, objective = objectiveEntity) }).toSet()
