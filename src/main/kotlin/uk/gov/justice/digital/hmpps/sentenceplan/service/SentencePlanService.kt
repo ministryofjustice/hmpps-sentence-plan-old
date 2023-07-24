@@ -58,10 +58,12 @@ class SentencePlanService(
       if (sentencePlanEntity.activeDate == null) {
         throw ConflictException("Only active sentence plans can be closed")
       }
-      if (updateSentencePlan.closureReason != null) {
+      if (updateSentencePlan.closureReason == null) {
         throw ConflictException("Closure reason must be provided")
       }
       sentencePlanEntity.closedDate = it
+      sentencePlanEntity.closureReason = updateSentencePlan.closureReason
+      sentencePlanEntity.closureReason = updateSentencePlan.closureNotes
     }
     return sentencePlanRepository.save(sentencePlanEntity).toModel()
   }
