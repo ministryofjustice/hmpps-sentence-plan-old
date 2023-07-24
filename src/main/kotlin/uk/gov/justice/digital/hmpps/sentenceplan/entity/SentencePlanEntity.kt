@@ -32,6 +32,10 @@ class SentencePlanEntity(
 
   var individualComments: String? = null,
 
+  var closureReason: String? = null,
+
+  var closureNotes: String? = null,
+
   @Id
   val id: UUID = UUID.randomUUID(),
 )

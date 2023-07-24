@@ -19,6 +19,8 @@ data class SentencePlan(
   val protectiveFactors: String? = null,
   val practitionerComments: String? = null,
   val individualComments: String? = null,
+  val closureReason: String? = null,
+  val closureNotes: String? = null,
 )
 
 data class CreateSentencePlan(
@@ -32,6 +34,8 @@ data class UpdateSentencePlan(
   val individualComments: String? = null,
   val activeDate: ZonedDateTime? = null,
   val closedDate: ZonedDateTime? = null,
+  val closureReason: String? = null,
+  val closureNotes: String? = null,
 )
 
 fun SentencePlanEntity.toModel() = SentencePlan(
@@ -44,4 +48,6 @@ fun SentencePlanEntity.toModel() = SentencePlan(
   protectiveFactors = protectiveFactors,
   practitionerComments = practitionerComments,
   individualComments = individualComments,
+  closureReason = closureReason,
+  closureNotes = closureNotes,
 )
