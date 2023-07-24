@@ -188,6 +188,7 @@ class SentencePlanIntegrationTest {
       wireMockRuntimeInfo,
       UpdateSentencePlan(
         closedDate = closedDate,
+        closureReason = "Sentence plan completed"
       ),
     )
 
