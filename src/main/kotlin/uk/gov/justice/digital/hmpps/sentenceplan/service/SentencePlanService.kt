@@ -63,7 +63,7 @@ class SentencePlanService(
       }
       sentencePlanEntity.closedDate = it
       sentencePlanEntity.closureReason = updateSentencePlan.closureReason
-      sentencePlanEntity.closureReason = updateSentencePlan.closureNotes
+      sentencePlanEntity.closureNotes = updateSentencePlan.closureNotes
     }
     return sentencePlanRepository.save(sentencePlanEntity).toModel()
   }
