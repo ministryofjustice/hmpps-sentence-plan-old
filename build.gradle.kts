@@ -1,11 +1,11 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "5.2.3"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "5.3.0"
   kotlin("jvm") version "1.8.20"
   kotlin("plugin.spring") version "1.8.20"
-  kotlin("plugin.jpa") version "1.8.20"
-  id("org.jlleitschuh.gradle.ktlint") version "11.3.1"
+  kotlin("plugin.jpa") version "1.9.0"
+  id("org.jlleitschuh.gradle.ktlint") version "11.5.1"
   id("com.google.cloud.tools.jib") version "3.3.2"
   jacoco
 }
@@ -33,8 +33,8 @@ dependencies {
   implementation("org.flywaydb:flyway-core")
   implementation("org.jetbrains.kotlin:kotlin-reflect")
   implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
-  implementation("io.sentry:sentry-spring-boot-starter:6.25.1")
-  implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0")
+  implementation("io.sentry:sentry-spring-boot-starter:6.28.0")
+  implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
 
   runtimeOnly("org.postgresql:postgresql")
 
