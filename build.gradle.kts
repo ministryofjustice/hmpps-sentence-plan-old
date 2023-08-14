@@ -4,7 +4,7 @@ plugins {
   id("uk.gov.justice.hmpps.gradle-spring-boot") version "5.2.3"
   kotlin("jvm") version "1.8.20"
   kotlin("plugin.spring") version "1.8.20"
-  kotlin("plugin.jpa") version "1.8.20"
+  kotlin("plugin.jpa") version "1.9.0"
   id("org.jlleitschuh.gradle.ktlint") version "11.3.1"
   id("com.google.cloud.tools.jib") version "3.3.2"
   jacoco
