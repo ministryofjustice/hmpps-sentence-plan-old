@@ -1,7 +1,7 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-  id("uk.gov.justice.hmpps.gradle-spring-boot") version "5.4.0"
+  id("uk.gov.justice.hmpps.gradle-spring-boot") version "5.4.1"
   kotlin("jvm") version "1.9.10"
   kotlin("plugin.spring") version "1.9.10"
   kotlin("plugin.jpa") version "1.9.10"
@@ -33,14 +33,14 @@ dependencies {
   implementation("org.flywaydb:flyway-core")
   implementation("org.jetbrains.kotlin:kotlin-reflect")
   implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
-  implementation("io.sentry:sentry-spring-boot-starter:6.28.0")
+  implementation("io.sentry:sentry-spring-boot-starter:6.29.0")
   implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
 
   runtimeOnly("org.postgresql:postgresql")
 
   testImplementation("org.springframework.boot:spring-boot-starter-test")
   testImplementation("org.springframework.security:spring-security-test")
-  testImplementation("com.github.tomakehurst:wiremock-jre8-standalone:2.35.0")
+  testImplementation("com.github.tomakehurst:wiremock-jre8-standalone:3.0.1")
 }
 
 dependencyManagement {
