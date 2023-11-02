@@ -1,7 +1,7 @@
 version: 2.1
 
 orbs:
-  hmpps: ministryofjustice/hmpps@7.1.0
+  hmpps: ministryofjustice/hmpps@7
   gradle: circleci/gradle@3.0.0
   mem: circleci/rememborb@0.0.2
 
@@ -25,7 +25,9 @@ jobs:
       tag: "17"
     docker: *db_docker_config
     environment:
-      _JAVA_OPTIONS: -Xmx512m -XX:ParallelGCThreads=2 -XX:ConcGCThreads=2 -Djava.util.concurrent.ForkJoinPool.common.parallelism=2 -Dorg.gradle.daemon=true -Dkotlin.compiler.execution.strategy=in-process
+      _JAVA_OPTIONS: -Xmx512m -XX:ParallelGCThreads=2 -XX:ConcGCThreads=2
+        -Djava.util.concurrent.ForkJoinPool.common.parallelism=2
+        -Dorg.gradle.daemon=true -Dkotlin.compiler.execution.strategy=in-process
     steps:
       - checkout
       - gradle/with_cache:
@@ -63,7 +65,10 @@ jobs:
       name: hmpps/java
       tag: "17.0"
     environment:
-      _JAVA_OPTIONS: -Xmx1024m -XX:ParallelGCThreads=2 -XX:ConcGCThreads=2 -XX:ParallelGCThreads=2 -Djava.util.concurrent.ForkJoinPool.common.parallelism=2 -Dorg.gradle.daemon=false
+      _JAVA_OPTIONS: -Xmx1024m -XX:ParallelGCThreads=2 -XX:ConcGCThreads=2
+        -XX:ParallelGCThreads=2
+        -Djava.util.concurrent.ForkJoinPool.common.parallelism=2
+        -Dorg.gradle.daemon=false
     parameters:
       image_name:
         type: string
@@ -112,7 +117,7 @@ workflows:
       - hmpps/trivy_latest_scan:
           name: vulnerability_scan
           slack_channel: probation-integration-notifications
-          requires: [jib-build]
+          requires: [ jib-build ]
           context:
             - hmpps-common-vars
           filters:
