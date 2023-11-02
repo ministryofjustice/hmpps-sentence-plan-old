@@ -33,7 +33,7 @@ dependencies {
   implementation("org.flywaydb:flyway-core")
   implementation("org.jetbrains.kotlin:kotlin-reflect")
   implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
-  implementation("io.sentry:sentry-spring-boot-starter:6.32.0")
+  implementation("io.sentry:sentry-spring-boot-starter:6.33.0")
   implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
 
   runtimeOnly("org.postgresql:postgresql")
