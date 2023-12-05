@@ -4,7 +4,7 @@
   },
   "customDimensions": {
     "service.version": "${VERSION}",
-    "service.team": "probation-integration"
+    "service.team": "hmpps-sentence-planning"
   },
   "instrumentation": {
     "logging": {
