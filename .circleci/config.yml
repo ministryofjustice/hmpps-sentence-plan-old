@@ -111,7 +111,7 @@ workflows:
                 - main
       - hmpps/trivy_latest_scan:
           name: vulnerability_scan
-          slack_channel: probation-integration-notifications
+          slack_channel: hmpps-sentence-plan-notifications
           requires: [jib-build]
           context:
             - hmpps-common-vars
