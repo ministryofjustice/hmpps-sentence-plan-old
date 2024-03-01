@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
   id("uk.gov.justice.hmpps.gradle-spring-boot") version "5.9.0"
-  kotlin("jvm") version "1.9.21"
+  kotlin("jvm") version "1.9.22"
   kotlin("plugin.spring") version "1.9.21"
   kotlin("plugin.jpa") version "1.9.21"
   id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
@@ -34,7 +34,7 @@ dependencies {
   implementation("org.jetbrains.kotlin:kotlin-reflect")
   implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
   implementation("io.sentry:sentry-spring-boot-starter:6.34.0")
-  implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
+  implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
 
   runtimeOnly("org.postgresql:postgresql")
 
