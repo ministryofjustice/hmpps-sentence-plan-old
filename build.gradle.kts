@@ -6,7 +6,7 @@ plugins {
   kotlin("plugin.spring") version "1.9.21"
   kotlin("plugin.jpa") version "1.9.21"
   id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
-  id("com.google.cloud.tools.jib") version "3.4.0"
+  id("com.google.cloud.tools.jib") version "3.4.1"
   jacoco
 }
 
