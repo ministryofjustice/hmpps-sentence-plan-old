@@ -5,7 +5,7 @@ plugins {
   kotlin("jvm") version "1.9.22"
   kotlin("plugin.spring") version "1.9.21"
   kotlin("plugin.jpa") version "1.9.21"
-  id("org.jlleitschuh.gradle.ktlint") version "11.6.1"
+  id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
   id("com.google.cloud.tools.jib") version "3.4.0"
   jacoco
 }
@@ -33,7 +33,7 @@ dependencies {
   implementation("org.flywaydb:flyway-core")
   implementation("org.jetbrains.kotlin:kotlin-reflect")
   implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
-  implementation("io.sentry:sentry-spring-boot-starter:6.34.0")
+  implementation("io.sentry:sentry-spring-boot-starter:7.4.0")
   implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0")
 
   runtimeOnly("org.postgresql:postgresql")
