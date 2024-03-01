@@ -2,10 +2,10 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
   id("uk.gov.justice.hmpps.gradle-spring-boot") version "5.9.0"
-  kotlin("jvm") version "1.9.21"
+  kotlin("jvm") version "1.9.22"
   kotlin("plugin.spring") version "1.9.21"
   kotlin("plugin.jpa") version "1.9.21"
-  id("org.jlleitschuh.gradle.ktlint") version "11.6.1"
+  id("org.jlleitschuh.gradle.ktlint") version "12.1.0"
   id("com.google.cloud.tools.jib") version "3.4.0"
   jacoco
 }
