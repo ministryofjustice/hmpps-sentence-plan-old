@@ -19,8 +19,6 @@ repositories {
   mavenCentral()
 }
 
-extra["springCloudVersion"] = "2022.0.3"
-
 dependencies {
   implementation("org.springframework.boot:spring-boot-starter-actuator")
   implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -32,7 +30,6 @@ dependencies {
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
   implementation("org.flywaydb:flyway-core")
   implementation("org.jetbrains.kotlin:kotlin-reflect")
-  implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
   implementation("io.sentry:sentry-spring-boot-starter:7.6.0")
   implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.4.0")
 
@@ -41,12 +38,6 @@ dependencies {
   testImplementation("org.springframework.boot:spring-boot-starter-test")
   testImplementation("org.springframework.security:spring-security-test")
   testImplementation("com.github.tomakehurst:wiremock-jre8-standalone:3.0.1")
-}
-
-dependencyManagement {
-  imports {
-    mavenBom("org.springframework.cloud:spring-cloud-dependencies:${property("springCloudVersion")}")
-  }
 }
 
 tasks {
