@@ -30,7 +30,7 @@ dependencies {
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
   implementation("org.flywaydb:flyway-core")
   implementation("org.jetbrains.kotlin:kotlin-reflect")
-  implementation("io.sentry:sentry-spring-boot-starter:7.6.0")
+  implementation("io.sentry:sentry-spring-boot-starter:7.7.0")
   implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.4.0")
 
   runtimeOnly("org.postgresql:postgresql")
